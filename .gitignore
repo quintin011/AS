@@ -1,0 +1,4 @@
+*.pem
+postgres/
+trades/*
+*/*.pem
