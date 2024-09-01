@@ -3,6 +3,6 @@
 */.env
 */postgres
 .vscode/easycode.ignore
-backend/app.log
-backend/backup.log
-backend/trades/trades.json
+*/app.log
+*/backup.log
+*/trades
