@@ -1,4 +1,8 @@
 *.pem
-postgres/
-trades/*
 */*.pem
+*/.env
+*/postgres
+.vscode/easycode.ignore
+*/app.log
+*/backup.log
+*/trades
