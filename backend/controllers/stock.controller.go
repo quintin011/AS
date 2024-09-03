@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/cw2/backend/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +17,14 @@ func UpdateStockTimestamp() *time.Time {
 	nowT, _ := time.Parse("2006-01-02T15:04:05.999999", now)
 	nowT = nowT.Add(-(8 * time.Hour))
 	return &nowT
+}
+
+func (S *Stocks)UpdateStock(newStock *models.Stock) {
+	for i, s := range *S {
+		if s.Symbol == newStock.Symbol {
+			(*S)[i] = *newStock
+		}
+	}
 }
 
 func (c *Controller) GetStocks(ctx *gin.Context) {

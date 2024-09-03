@@ -112,8 +112,7 @@ func main() {
 	R.MainR(r)
 	go backup.Backup()
 	time.Sleep(time.Second * 5)
+	go C.TradeRun()
+	time.Sleep(time.Second * 5)
 	go log.Fatal(server.Run(":8000"))
-
-	//Static.UpdateStockTimestamp()
-
 }

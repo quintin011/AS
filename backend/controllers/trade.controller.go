@@ -1,11 +1,15 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"log"
+	"os"
 	"strings"
+	"time"
 
 	"github.com/cw2/backend/models"
+	"gorm.io/gorm"
 )
 var trades Trades
 var BidQueue []models.Order
@@ -209,7 +213,11 @@ func (c *Controller)PairOrder() {
 			}
 		}
 	}
-	trades.WriteTradeJson(tradejsloc)
+	err := trades.WriteTradeJson(tradejsloc)
+	if err != nil {
+		log.Panic(err)
+		return
+	}
 }
 
 func (c *Controller) ProcessTrading() {
@@ -278,7 +286,7 @@ func (c *Controller) ProcessTrading() {
 				log.Panic(updateBOStatus.Error)
 			}	
 		}
-		chkSellerPosition := c.DB.Find(&POS,models.Position{UID: usr.UID,SID: *SO.Symbol})
+		chkSellerPosition := c.DB.Find(&POS,models.Position{UID: *SO.UID,SID: *SO.Symbol})
 		if chkSellerPosition.Error != nil {
 			log.Panic(chkSellerPosition.Error)
 			trades = append(trades[:ti],trades[ti+1:]... )
@@ -302,8 +310,101 @@ func (c *Controller) ProcessTrading() {
 			if updateSOStatus.Error != nil {
 				log.Panic(updateSOStatus.Error)
 			}
+			return
 		} else {
-			
+			newPOS := models.Position{
+				UID: *SO.UID,
+				SID: *SO.Symbol,
+				Volume: POS.Volume - *trade.TVol,
+			}
+			updateSellerPosition := c.DB.First(&POS,models.Position{UID: *SO.UID,SID: *SO.Symbol}).Updates(newPOS)
+			if updateSellerPosition.Error != nil {
+				log.Panic(updateSellerPosition.Error)
+				return
+			}
+			updateSellerBalance := c.DB.First(&usr,models.User{UID: *SO.UID}).Update("balance",usr.Balance+(*trade.Price * float32(*trade.TVol)))
+			if updateSellerBalance.Error != nil {
+				log.Panic(updateSellerBalance.Error)
+				return
+			}
+			updateSOStatus := c.DB.First(&SO,"o_id = ?",SO.OID).Update("status","Accepted")
+			if updateSOStatus.Error != nil {
+				log.Panic(updateSOStatus.Error)
+				return
+			}
+			newPOS = models.Position{
+				UID: *BO.UID,
+				SID: *BO.Symbol,
+				Volume: POS.Volume + *trade.TVol,
+			}
+			chkBuyerPosition := c.DB.Find(&POS,models.Position{UID: *BO.UID,SID: *BO.Symbol})
+			if errors.Is(chkBuyerPosition.Error, gorm.ErrRecordNotFound) {
+				rslt := c.DB.Create(&newPOS)
+				if rslt.Error != nil {
+					log.Panic(rslt.Error)
+					return
+				}
+			} else {
+				rslt := c.DB.First(&POS,models.Position{UID: *BO.UID,SID: *BO.Symbol}).Updates(newPOS)
+				if rslt.Error != nil {
+					log.Panic(rslt.Error)
+					return
+				}
+			}
+			updateBuyerBalance := c.DB.First(&usr,models.User{UID: *BO.UID}).Update("balance",usr.Balance-(*trade.Price * float32(*trade.TVol)))
+			if updateBuyerBalance.Error != nil {
+				log.Panic(updateBuyerBalance.Error)
+				return
+			}
+			updateBOStatus := c.DB.First(&BO,"o_id",BO.OID).Update("status","Accepted")
+			if updateBOStatus.Error != nil {
+				log.Panic(updateBOStatus.Error)
+				return
+			}
+			var newHigh float32
+			var newLow float32
+			var newStock models.Stock
+			for _, s := range stocks {
+				if s.Symbol == BO.Symbol {
+					if *trade.Price > s.High {
+						newHigh = *trade.Price
+						newLow = s.Low
+					} else if *trade.Price < s.Low {
+						newHigh = s.High
+						newLow = *trade.Price
+					} else {
+						newHigh = s.High
+						newLow = s.Low
+					}
+					newStock = models.Stock{
+						Symbol: BO.Symbol,
+						Timestamp: UpdateStockTimestamp(),
+						CurrBid: BO.Price,
+						CurrAsk: SO.Price,
+						LastTrade: *trade.Price,
+						High: newHigh,
+						Low: newLow,
+						Volume: s.Volume,
+					}
+				}
+			}
+			stocks.UpdateStock(&newStock)
+			trades = append(trades[:ti],trades[ti+1:]... )
 		}
+	}
+	stocks.WriteStockJson(mkdloc)
+	err := os.Rename(tradejsloc,"trade/trades_DONE"+time.Now().Format("20060102_150405s999999")+".json")
+	if err != nil {
+		log.Panic(err)
+		return
+	}
+}
+
+func (c *Controller)TradeRun() {
+	for {
+		c.PairOrder()
+		time.Sleep(time.Second * 5)
+		c.ProcessTrading()
+		time.Sleep(time.Second * 5)
 	}
 }
