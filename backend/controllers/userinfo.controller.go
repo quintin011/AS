@@ -102,7 +102,7 @@ func (c *Controller) ChangePassword(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
 	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(*&payload.Newpwd), 10)
+	hash, err := bcrypt.GenerateFromPassword([]byte(payload.Newpwd), 10)
 	if err != nil {
 		log.Panic(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
