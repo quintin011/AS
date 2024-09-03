@@ -4,6 +4,7 @@ Please define environment file under working directory.
 ```
 .env
 ----
+SERVICE_PORT=10001
 DB_HOST=
 DB_PORT=5432
 DB_USER=postgres
@@ -12,6 +13,7 @@ DB_PASSWORD=
 ```
 | Name          | Description                                   |
 | ------------- | --------------------------------------------- |
+| SERVICE_PORT  | API service port. Default: 10001              |
 | DB_HOST       | PostgreSQL Database IP/Hostname               |
 | DB_PORT       | PostgreSQL Database Port. Default: 5432       |
 | DB_USER       | PostgreSQL Operations User. Default: postgres |

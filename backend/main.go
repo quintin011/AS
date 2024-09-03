@@ -28,6 +28,7 @@ var (
 	R          routes.Routes
 	tradejsloc = "trades/trades.json"
 	logger     *logrus.Logger
+	sport	   string
 )
 
 func init() {
@@ -57,11 +58,12 @@ func init() {
 	if err != nil {
 		log.Fatal("Error is occurred  on .env file please check")
 	}
-	host := os.Getenv("DB_HOST")
-	port, _ := strconv.Atoi(os.Getenv("DB_PORT"))
+	host,_ := strconv.Atoi(os.Getenv("DB_HOST"))
+	port := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")
 	dbname := os.Getenv("DB_NAME")
 	pwd := os.Getenv("DB_PASSWORD")
+	sport = os.Getenv("SERVICE_PORT")
 
 	DB, err = gorm.Open(postgres.Open(fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
 		host, port, user, dbname, pwd)), &gorm.Config{})
@@ -114,5 +116,5 @@ func main() {
 	time.Sleep(time.Second * 5)
 	go C.TradeRun()
 	time.Sleep(time.Second * 5)
-	go log.Fatal(server.Run(":8000"))
+	go log.Fatal(server.Run(":"+sport))
 }
