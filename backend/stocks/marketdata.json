@@ -2,51 +2,51 @@
     {
         "symbol":"0001",
         "updated_at":"2024-08-29T00:00:00.000000Z",
-        "currbid":"12",
-        "currask":"14",
-        "lasttrade":"14",
-        "high_price":"16",
-        "low_price":"12",
-        "vol":"1024"
+        "currbid":12,
+        "currask":14,
+        "lasttrade":14,
+        "high_price":16,
+        "low_price":12,
+        "vol":1024
     },
     {
         "symbol":"0002",
         "updated_at":"2024-08-29T00:00:00.000000Z",
-        "currbid":"36",
-        "currask":"43",
-        "lasttrade":"43",
-        "high_price":"54",
-        "low_price":"36",
-        "vol":"2255"
+        "currbid":36,
+        "currask":43,
+        "lasttrade":43,
+        "high_price":54,
+        "low_price":36,
+        "vol":2255
     },
     {
         "symbol":"0003",
         "updated_at":"2024-08-29T00:00:00.000000Z",
-        "currbid":"114",
-        "currask":"116",
-        "lasttrade":"116",
-        "high_price":"116",
-        "low_price":"114",
-        "vol":"1000"
+        "currbid":114,
+        "currask":116,
+        "lasttrade":116,
+        "high_price":116,
+        "low_price":114,
+        "vol":1000
     },
     {
         "symbol":"0004",
         "updated_at":"2024-08-29T09:00:00.000000Z",
-        "currbid":"54",
-        "currask":"77",
-        "lasttrade":"77",
-        "high_price":"79",
-        "low_price":"54",
-        "vol":"3543"
+        "currbid":54,
+        "currask":77,
+        "lasttrade":77,
+        "high_price":79,
+        "low_price":54,
+        "vol":3543
     },
     {
         "symbol":"0005",
         "updated_at":"2024-08-29T09:00:00.000000Z",
-        "currbid":"78",
-        "currask":"89",
-        "lasttrade":"89",
-        "high_price":"99",
-        "low_price":"78",
-        "vol":"4478"
+        "currbid":78,
+        "currask":89,
+        "lasttrade":89,
+        "high_price":99,
+        "low_price":78,
+        "vol":4478
     }
 ]

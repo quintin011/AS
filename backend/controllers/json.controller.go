@@ -47,7 +47,9 @@ func (T *Trades)WriteTradeJson(fname string) error{
 			return err
 		}
 	} else {
-		err := cp.Copy(fname,fname+"_"+time.Now().Format("20060102_150405s999999"))
+		file,_ := os.Open(fname)
+		defer file.Close()
+		_, err := file.Write(JSON)
 		if err != nil {
 			return err
 		}

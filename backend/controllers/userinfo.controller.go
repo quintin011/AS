@@ -10,33 +10,43 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
-func (c *Controller)UpdateBankInfo(ctx *gin.Context) {
+
+func (c *Controller) UpdateBankInfo(ctx *gin.Context) {
 	var payload *models.BankIn
+	var usr models.User
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status":"fail","message": err.Error()})
+		log.Panic(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
 	}
-	uid := ctx.Param("uid")
-	rslt := c.DB.Model(&models.User{}).Where("uid = ?", uid).Updates(models.User{
-			BankCode: payload.BankCode, 
-			BranchCode: payload.BranchCode, 
-			AccountNo: payload.AccountNo,
-		},
+	uid := ctx.GetHeader("X-Uid")
+	rslt := c.DB.First(&usr, "uid = ?", uid)
+	if rslt.Error != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid uid"})
+		return
+	}
+	rslt = c.DB.Model(&usr).Updates(models.User{
+		BankCode:   payload.BankCode,
+		BranchCode: payload.BranchCode,
+		AccountNo:  payload.AccountNo,
+	},
 	)
 	if rslt.Error != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error","message": rslt.Error.Error()})
+		log.Panic(rslt.Error)
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
 	}
-	ctx.JSON(http.StatusAccepted,gin.H{"status": "success"})
+	ctx.JSON(http.StatusAccepted, gin.H{"status": "success"})
 }
-func (c *Controller)ChangePassword(ctx *gin.Context) {
+func (c *Controller) ChangePassword(ctx *gin.Context) {
 	var payload *models.Changepwd
 	var usr models.User
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status":"fail","message": err.Error()})
+		log.Panic(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
 	}
-	uid := ctx.Param("uid")
+	uid := ctx.GetHeader("X-Uid")
 	rslt := c.DB.First(&usr, "uid = ?", uid)
 	if rslt.Error != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid uid"})
@@ -45,41 +55,44 @@ func (c *Controller)ChangePassword(ctx *gin.Context) {
 	pwd, err := encryption.Decrypt(usr.Password)
 	if err != nil {
 		log.Panic(err)
-		ctx.JSON(http.StatusInternalServerError,gin.H{"status":"fail", "message": "Failed to Decrypt."})
-		return
-	} 
-	err = bcrypt.CompareHashAndPassword([]byte(pwd),[]byte(payload.Currpwd))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest,gin.H{"status":"fail","message":"password"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"status": "fail"})
 		return
 	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(*&payload.Newpwd),10)
+	err = bcrypt.CompareHashAndPassword([]byte(pwd), []byte(payload.Currpwd))
 	if err != nil {
 		log.Panic(err)
-		ctx.JSON(http.StatusBadRequest,gin.H{"status":"fail", "message": "Failed to hash password."})
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
 	}
-	newpwd,err := encryption.Encrypt(hash)
+	hash, err := bcrypt.GenerateFromPassword([]byte(*&payload.Newpwd), 10)
 	if err != nil {
 		log.Panic(err)
-		ctx.JSON(http.StatusInternalServerError,gin.H{"status":"fail", "message": "Failed to Encrypt."})
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
+		return
+	}
+	newpwd, err := encryption.Encrypt(hash)
+	if err != nil {
+		log.Panic(err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"status": "fail"})
 		return
 	}
 	rslt = c.DB.Model(&usr).Update("password", newpwd)
 	if rslt.Error != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error","message": rslt.Error.Error()})
+		log.Panic(rslt.Error)
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
 	}
-	ctx.JSON(http.StatusAccepted,gin.H{"status": "success"})	
+	ctx.JSON(http.StatusAccepted, gin.H{"status": "success"})
 }
-func (c *Controller)ChangeUserInfo(ctx *gin.Context) {
+func (c *Controller) ChangeUserInfo(ctx *gin.Context) {
 	var payload *models.Changeinfo
 	var usr models.User
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status":"fail","message": err.Error()})
+		log.Panic(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
 	}
-	uid := ctx.Param("uid")
+	uid := ctx.GetHeader("X-Uid")
 	rslt := c.DB.First(&usr, "uid = ?", uid)
 	if rslt.Error != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid uid"})
@@ -94,10 +107,10 @@ func (c *Controller)ChangeUserInfo(ctx *gin.Context) {
 		last4no, err := encryption.Encrypt([]byte(payload.Mobile)[4:])
 		if err != nil {
 			log.Panic(err)
-			ctx.JSON(http.StatusInternalServerError,gin.H{"status":"fail", "message": "Failed to Encrypt."})
+			ctx.JSON(http.StatusInternalServerError, gin.H{"status": "fail"})
 			return
 		}
-		NewMobile := string([]byte(payload.Mobile)[:4])+last4no
+		NewMobile := string([]byte(payload.Mobile)[:4]) + last4no
 		ninfo.Mobile = &NewMobile
 	}
 	if payload.Name != "" {
@@ -105,8 +118,9 @@ func (c *Controller)ChangeUserInfo(ctx *gin.Context) {
 	}
 	rslt = c.DB.Model(&usr).Updates(ninfo)
 	if rslt.Error != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error","message": rslt.Error.Error()})
+		log.Panic(rslt.Error)
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
 	}
-	ctx.JSON(http.StatusAccepted,gin.H{"status": "success"})
+	ctx.JSON(http.StatusAccepted, gin.H{"status": "success"})
 }
