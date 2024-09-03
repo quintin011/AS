@@ -65,8 +65,8 @@ marketdata.json
   7. /api/v1/stock/{Symbol} 
      - Get Specific Stock
 - POST
-  1. /api/v1/register 
-     - User Registration
+1. /api/v1/register 
+   - User Registration
 ```
 Body
 ----
