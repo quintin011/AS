@@ -1,9 +1,8 @@
 # AS
 For connection of PostgreSQL Database,
 Please define environment file under working directory.
+> .env
 ```
-.env
-----
 SERVICE_PORT=10001
 DB_HOST=
 DB_PORT=5432
@@ -22,9 +21,9 @@ DB_PASSWORD=
 
 For Stocks data, please self define marketdata.json file in stocks directory.
 Services will make new stocks directory when stocks is not exist on working directory.
+
+> marketdata.json
 ```
-marketdata.json
----
 [
     {
         "symbol": string,
@@ -65,11 +64,10 @@ marketdata.json
   7. /api/v1/stock/{Symbol} 
      - Get Specific Stock
 - POST
-1. /api/v1/register 
-   - User Registration
+  1. /api/v1/register 
+     - User Registration
+     - Body:
 ```
-Body
-----
 {   
     "name": "test",
     "mobile": "12345678",
@@ -78,22 +76,19 @@ Body
     "hkid": "Y1234567"
 }
 ```
-
-  1. /api/v1/login 
+  2. /api/v1/login 
      - Login Method to get JWT
+     - Body:
 ```
-Body
-----
 {
     "email": "test@test.com",
     "password": "123456"
 }
 ``` 
-  1. /api/v1/order/create 
+  3. /api/v1/order/create 
      - Create Order by User
+     - Body: 
 ```
-Body
-----
 {
         "method":"buy/sell",
         "order":"limit/price",
@@ -101,37 +96,34 @@ Body
         "symbol":"0001",
         "price":123,
         quantity:123
-    }
+}
 ```
-  1. /api/v1/order/{Order ID}/cancel 
+  4. /api/v1/order/{Order ID}/cancel 
      - Cancel Order by User. But this is not Remove record on DataBase. 
      - it is change order status to "Cancelled"
-  2. /api/v1/user/update/bankinfo 
+  5. /api/v1/user/update/bankinfo 
      - Setup bank account
+     - Body:
 ```
-Body
-----
 {
     "bank": "123",
     "branch": "123",
     "account": "123123123"
 }
 ```
-  1. /api/v1/user/update/password
+  6. /api/v1/user/update/password
      - Change Password
+     - Body:
 ```
-Body
-----
 {
     "currpwd": "123",
     "newpwd": "123"
 }
 ```
-  1. /api/v1/user/update/userinfo
+  7. /api/v1/user/update/userinfo
      - Edit User informations
+     - Body:
 ```
-Body
-----
 {
     "name": "fed",
     "email": "abc@def.com",
