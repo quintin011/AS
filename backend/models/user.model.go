@@ -65,3 +65,18 @@ type Changeinfo struct {
 	Mobile string `json:"mobile,omitempty" binding:required`
 	Email  string `json:"email,omitempty" binding:required`
 }
+type UserinfoOut struct {
+	Name       string    `json:"name,omitempty" binding:required`
+	Email      string    `json:"email,omitempty" binding:required`
+	Mobile     string    `json:"mobile,omitempty" binding:required`
+	HKID       string    `json:"hk_id,omitempty" binding:required`
+	Balance    float32    `json:"balance,omitempty" binding:required`
+	BankAccount Bank	`json:"bank,omitempty" binding:required`	
+	Position   []Position `json:"pos,omitempty" binding:required`
+	Order      []Order    `json:"order,omitempty" binding:required`	
+}
+type Bank struct {
+	BankCode   string     `json:"code,omitempty" binding:required`
+	BranchCode string     `json:"branch,omitempty" binding:required`
+	AccountNo  string     `json:"ac,omitempty" binding:required`
+}

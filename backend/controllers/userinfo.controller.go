@@ -10,6 +10,44 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
+func (c *Controller) GetUser(ctx *gin.Context) {
+	uid := ctx.GetHeader("X-Uid")
+	var usr models.User
+	var err error
+	rslt := c.DB.First(&usr, "uid = ?", uid)
+	if rslt.Error != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid uid"})
+		return
+	}
+	var mobile,hkid string
+	first4no := string([]byte(*usr.Mobile)[:4])
+	last4no := string([]byte(*usr.Mobile)[4:])
+	last4no, err = encryption.Decrypt(&last4no)
+	if err != nil {
+		log.Panic(err)
+	}
+	mobile = first4no+last4no
+	hkid, err = encryption.Decrypt(usr.HKID)
+	if err != nil {
+		log.Panic(err)
+	}	
+	bank := models.Bank{
+		BankCode: usr.BankCode,
+		BranchCode: usr.BranchCode,
+		AccountNo: usr.AccountNo,
+	}
+	ousr := models.UserinfoOut{
+		Name: *usr.Name,
+		Email: *usr.Email,
+		Mobile: mobile,
+		HKID: hkid,
+		Balance: usr.Balance,
+		BankAccount: bank,
+		Position: usr.Position,
+		Order: usr.Order,
+	}
+	ctx.JSON(http.StatusOK, &ousr)
+}
 
 func (c *Controller) UpdateBankInfo(ctx *gin.Context) {
 	var payload *models.BankIn
