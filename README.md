@@ -49,7 +49,6 @@ marketdata.json
 | high_price    | Highest Transcation Price                                  |
 | low_price     | Lowest Transcation Price                                   |
 | vol           | Stock Quantity                                             |
-```
 - GET
     1. /api/hc 
         Health Check of API
