@@ -51,22 +51,22 @@ marketdata.json
 | vol           | Stock Quantity                                             |
 - GET
   1. /api/hc 
-    Health Check of API
+     - Health Check of API
   2. /api/v1/jwt/refresh 
-     Refresh JWT timelive
+     - Refresh JWT timelive
   3. /api/v1/order 
-     List Order by User
+     - List Order by User
   4. /api/v1/order/{Order ID} 
-     Get Specific Order 
+     - Get Specific Order 
   5. /api/v1/user 
-     Get User infomations
+     - Get User infomations
   6. /api/v1/stock 
-     List Stock on Market
+     - List Stock on Market
   7. /api/v1/stock/{Symbol} 
-     Get Specific Stock
+     - Get Specific Stock
 - POST
   1. /api/v1/register 
-     User Registration
+     - User Registration
 -----
 ```
 Body
@@ -81,7 +81,7 @@ Body
 ```
 
   2. /api/v1/login 
-     Login Method to get JWT
+     - Login Method to get JWT
 ```
 Body
 ----
@@ -91,7 +91,7 @@ Body
 }
 ``` 
   3. /api/v1/order/create 
-     Create Order by User
+     - Create Order by User
 ```
 Body
 ----
@@ -105,10 +105,10 @@ Body
     }
 ```
   4. /api/v1/order/{Order ID}/cancel 
-     Cancel Order by User. But this is not Remove record on DataBase. 
-     it is change order status to "Cancelled"
+     - Cancel Order by User. But this is not Remove record on DataBase. 
+     - it is change order status to "Cancelled"
   5. /api/v1/user/update/bankinfo 
-     Setup bank account
+     - Setup bank account
 ```
 Body
 ----
@@ -118,8 +118,8 @@ Body
     "account": "123123123"
 }
 ```
-    6. /api/v1/user/update/password
-        Change Password
+  6. /api/v1/user/update/password
+     - Change Password
 ```
 Body
 ----
@@ -129,7 +129,7 @@ Body
 }
 ```
   7. /api/v1/user/update/userinfo
-     Edit User informations
+     - Edit User informations
 ```
 Body
 ----
