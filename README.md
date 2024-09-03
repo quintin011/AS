@@ -67,7 +67,6 @@ marketdata.json
 - POST
   1. /api/v1/register 
      - User Registration
------
 ```
 Body
 ----
@@ -80,7 +79,7 @@ Body
 }
 ```
 
-  2. /api/v1/login 
+  1. /api/v1/login 
      - Login Method to get JWT
 ```
 Body
@@ -90,7 +89,7 @@ Body
     "password": "123456"
 }
 ``` 
-  3. /api/v1/order/create 
+  1. /api/v1/order/create 
      - Create Order by User
 ```
 Body
@@ -104,10 +103,10 @@ Body
         quantity:123
     }
 ```
-  4. /api/v1/order/{Order ID}/cancel 
+  1. /api/v1/order/{Order ID}/cancel 
      - Cancel Order by User. But this is not Remove record on DataBase. 
      - it is change order status to "Cancelled"
-  5. /api/v1/user/update/bankinfo 
+  2. /api/v1/user/update/bankinfo 
      - Setup bank account
 ```
 Body
@@ -118,7 +117,7 @@ Body
     "account": "123123123"
 }
 ```
-  6. /api/v1/user/update/password
+  1. /api/v1/user/update/password
      - Change Password
 ```
 Body
@@ -128,7 +127,7 @@ Body
     "newpwd": "123"
 }
 ```
-  7. /api/v1/user/update/userinfo
+  1. /api/v1/user/update/userinfo
      - Edit User informations
 ```
 Body
