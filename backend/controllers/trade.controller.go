@@ -482,9 +482,11 @@ func (c *Controller) ProcessTrading() {
 					return
 				}
 			}
+			c.DB.Find(&usr,"uid = ?",BO.UID)
 			tprice = decimal.NewFromFloat32(*trade.Price).Mul(decimal.NewFromFloat32(float32(*trade.TVol))) 
 			price,_ = tprice.Float64()
 			newBalance = usr.Balance - float32(price)
+			fmt.Printf("price:%f,newBalance:%f\n",price,newBalance)	
 			updateBuyerBalance := c.DB.Model(&usr).Where(models.User{UID: *BO.UID}).Updates(models.User{Balance: newBalance})
 			if updateBuyerBalance.Error != nil {
 				log.Panic(updateBuyerBalance.Error)
