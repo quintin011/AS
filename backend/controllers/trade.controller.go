@@ -358,7 +358,7 @@ func (c *Controller) ProcessTrading() {
 				log.Panic(getSO.Error)
 				log.Panic(fmt.Errorf("Buy Order(%s) & Sell Order(%s) not Found",trade.BuyOID,trade.SellOID))
 			}
-			updateSOStatus := c.DB.First(&SO,"o_id = ?",trade.SellOID).Update("status","Conflicted")
+			updateSOStatus := c.DB.Model(&SO).Where("o_id = ?",trade.SellOID).Update("status","Conflicted")
 			if updateSOStatus.Error != nil {
 				log.Panic(updateSOStatus.Error)
 			}
@@ -373,19 +373,19 @@ func (c *Controller) ProcessTrading() {
 				log.Panic(getSO.Error)
 				log.Panic(fmt.Errorf("Buy Order(%s) & Sell Order(%s) not Found",trade.BuyOID,trade.SellOID))
 			}
-			updateSOStatus := c.DB.First(&SO,"o_id = ?",trade.SellOID).Update("status","Conflicted")
+			updateSOStatus := c.DB.Model(&SO).Where("o_id = ?",trade.SellOID).Update("status","Conflicted")
 			if updateSOStatus != nil {
 				log.Panic(updateSOStatus.Error)
 			}
 		}
 		if usr.Balance < (*trade.Price * float32(*trade.TVol)) {
-			updateBOStatus := c.DB.First(&BO).Update("status","Rejected")
+			updateBOStatus := c.DB.Model(&BO).Update("status","Rejected")
 			trades= append(trades[:ti],trades[ti+1:]... )
 			if updateBOStatus.Error != nil {
 				log.Panic(updateBOStatus.Error)
 			}
 		} else {
-			updateBOStatus := c.DB.First(&BO).Update("status","Progressing")	
+			updateBOStatus := c.DB.Model(&BO).Update("status","Progressing")	
 			if updateBOStatus.Error != nil {
 				log.Panic(updateBOStatus.Error)
 			}
@@ -394,7 +394,7 @@ func (c *Controller) ProcessTrading() {
 		if getSO.Error != nil {
 			log.Panic(getSO.Error)
 			trades = append(trades[:ti],trades[ti+1:]... )
-			updateBOStatus := c.DB.First(&BO).Update("status","Pending")	
+			updateBOStatus := c.DB.Model(&BO).Update("status","Pending")	
 			if updateBOStatus.Error != nil {
 				log.Panic(updateBOStatus.Error)
 			}	
@@ -403,7 +403,7 @@ func (c *Controller) ProcessTrading() {
 		if getSeller.Error != nil {
 			log.Panic(getSO.Error)
 			trades = append(trades[:ti],trades[ti+1:]... )
-			updateBOStatus := c.DB.First(&BO,"o_id = ?",BO.OID).Update("status","Pending")	
+			updateBOStatus := c.DB.Model(&BO).Update("status","Pending")	
 			if updateBOStatus.Error != nil {
 				log.Panic(updateBOStatus.Error)
 			}	
@@ -412,11 +412,11 @@ func (c *Controller) ProcessTrading() {
 		if chkSellerPosition.Error != nil {
 			log.Panic(chkSellerPosition.Error)
 			trades = append(trades[:ti],trades[ti+1:]... )
-			updateBOStatus := c.DB.First(&BO,"o_id = ?",BO.OID).Update("status","Pending")	
+			updateBOStatus := c.DB.Model(&BO).Update("status","Pending")	
 			if updateBOStatus.Error != nil {
 			 	log.Panic(updateBOStatus.Error)
 			}
-			updateSOStatus := c.DB.First(&SO,"o_id = ?",SO.OID).Update("status","Rejected")
+			updateSOStatus := c.DB.Model(&SO).Update("status","Rejected")
 			if updateSOStatus.Error != nil {
 				log.Panic(updateSOStatus.Error)
 			}
@@ -424,11 +424,11 @@ func (c *Controller) ProcessTrading() {
 		if POS.Volume < *trade.TVol {
 			log.Panic(fmt.Errorf("Seller(%s) had not enough volume of Symbol(%s)",SO.UID,*SO.Symbol))
 			trades = append(trades[:ti],trades[ti+1:]... )
-			updateBOStatus := c.DB.First(&BO,"o_id = ?",BO.OID).Update("status","Pending")	
+			updateBOStatus := c.DB.Model(&BO).Update("status","Pending")	
 			if updateBOStatus.Error != nil {
 			 	log.Panic(updateBOStatus.Error)
 			}
-			updateSOStatus := c.DB.First(&SO,"o_id = ?",SO.OID).Update("status","Rejected")
+			updateSOStatus := c.DB.Model(&SO).Update("status","Rejected")
 			if updateSOStatus.Error != nil {
 				log.Panic(updateSOStatus.Error)
 			}
@@ -439,17 +439,17 @@ func (c *Controller) ProcessTrading() {
 				SID: *SO.Symbol,
 				Volume: POS.Volume - *trade.TVol,
 			}
-			updateSellerPosition := c.DB.First(&POS,models.Position{UID: *SO.UID,SID: *SO.Symbol}).Updates(newPOS)
+			updateSellerPosition := c.DB.Model(&POS).Where(models.Position{UID: *SO.UID,SID: *SO.Symbol}).Updates(newPOS)
 			if updateSellerPosition.Error != nil {
 				log.Panic(updateSellerPosition.Error)
 				return
 			}
-			updateSellerBalance := c.DB.First(&usr,models.User{UID: *SO.UID}).Update("balance",usr.Balance+(*trade.Price * float32(*trade.TVol)))
+			updateSellerBalance := c.DB.Model(&usr).Where(models.User{UID: *SO.UID}).Update("balance",usr.Balance+(*trade.Price * float32(*trade.TVol)))
 			if updateSellerBalance.Error != nil {
 				log.Panic(updateSellerBalance.Error)
 				return
 			}
-			updateSOStatus := c.DB.First(&SO,"o_id = ?",SO.OID).Update("status","Accepted")
+			updateSOStatus := c.DB.Model(&SO).Update("status","Accepted")
 			if updateSOStatus.Error != nil {
 				log.Panic(updateSOStatus.Error)
 				return
@@ -467,18 +467,18 @@ func (c *Controller) ProcessTrading() {
 					return
 				}
 			} else {
-				rslt := c.DB.First(&POS,models.Position{UID: *BO.UID,SID: *BO.Symbol}).Updates(newPOS)
+				rslt := c.DB.Model(&POS).Where(models.Position{UID: *BO.UID,SID: *BO.Symbol}).Updates(newPOS)
 				if rslt.Error != nil {
 					log.Panic(rslt.Error)
 					return
 				}
 			}
-			updateBuyerBalance := c.DB.First(&usr,models.User{UID: *BO.UID}).Update("balance",usr.Balance-(*trade.Price * float32(*trade.TVol)))
+			updateBuyerBalance := c.DB.Model(&usr).Where(models.User{UID: *BO.UID}).Update("balance",usr.Balance-(*trade.Price * float32(*trade.TVol)))
 			if updateBuyerBalance.Error != nil {
 				log.Panic(updateBuyerBalance.Error)
 				return
 			}
-			updateBOStatus := c.DB.First(&BO,"o_id",BO.OID).Update("status","Accepted")
+			updateBOStatus := c.DB.Model(&BO).Update("status","Accepted")
 			if updateBOStatus.Error != nil {
 				log.Panic(updateBOStatus.Error)
 				return
