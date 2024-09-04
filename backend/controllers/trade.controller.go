@@ -43,8 +43,6 @@ func (c *Controller) SortOrders(symbol string,otype string, ptype string) ([]mod
 			log.Panic("error: wrong PlaceType")
 		}	
 	}
-	fmt.Printf("BQ:%s\n",tempBQ)
-	fmt.Printf("SQ:%s\n",tempSQ)
 	return tempBQ,tempSQ 
 }
 
@@ -352,6 +350,7 @@ func (c *Controller) ProcessTrading() {
 	var POS models.Position
 	trades := ReadTradeJson(tradejsloc)
 	for ti, trade := range trades {
+		fmt.Println(ti)
 		getBO := c.DB.Find(&BO,"o_id = ?",trade.BuyOID)
 		if getBO.Error != nil {
 			log.Panic(getBO.Error)
@@ -530,7 +529,6 @@ func (c *Controller) ProcessTrading() {
 			} else {
 				trades = append(trades[:ti],trades[ti+1:]... )
 			}
-			fmt.Println(trades)
 		}
 	}
 	stocks.WriteStockJson(mkdloc)
