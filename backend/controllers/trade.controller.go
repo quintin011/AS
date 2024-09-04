@@ -16,31 +16,33 @@ var BidQueue []models.Order
 var AskQueue []models.Order
 var tradejsloc = "trade/trades.json"
 
-func (c *Controller) SortOrders(symbol string,otype string, ptype string) {
+func (c *Controller) SortOrders(symbol string,otype string, ptype string) ([]models.Order,[]models.Order) {
+	var tempBQ,tempSQ []models.Order
 	switch strings.ToLower(otype) {
 	case "limit" :
 		switch strings.ToLower(ptype) {
 		case "standard" :
-			BidQueue = c.TradeListOrder(symbol,true,true,true)
-			AskQueue = c.TradeListOrder(symbol,false,true,true)
+			tempBQ = c.TradeListOrder(symbol,true,true,true)
+			tempSQ = c.TradeListOrder(symbol,false,true,true)
 		case "bid" :
-			BidQueue = c.TradeListOrder(symbol,true,true,false)
-			AskQueue = c.TradeListOrder(symbol,false,true,false)
+			tempBQ = c.TradeListOrder(symbol,true,true,false)
+			tempSQ = c.TradeListOrder(symbol,false,true,false)
 		default:
 			log.Panic("error: wrong PlaceType")
 		}
 	case "price":
 		switch strings.ToLower(ptype) {
 		case "standard" :
-			BidQueue = c.TradeListOrder(symbol,true,false,true)
-			AskQueue = c.TradeListOrder(symbol,false,false,true)
+			tempBQ = c.TradeListOrder(symbol,true,false,true)
+			tempSQ = c.TradeListOrder(symbol,false,false,true)
 		case "bid" :
-			BidQueue = c.TradeListOrder(symbol,true,false,false)
-			AskQueue = c.TradeListOrder(symbol,false,false,false)
+			tempBQ = c.TradeListOrder(symbol,true,false,false)
+			tempSQ = c.TradeListOrder(symbol,false,false,false)
 		default:
 			log.Panic("error: wrong PlaceType")
 		}	
 	}
+	return tempBQ,tempSQ 
 }
 
 func (c *Controller)PairOrder() {
@@ -50,7 +52,7 @@ func (c *Controller)PairOrder() {
 		for i:=0;i<4;i++{
 			switch i {
 			case 0 :
-				c.SortOrders(*s.Symbol,"limit","standard")
+				BidQueue,AskQueue = c.SortOrders(*s.Symbol,"limit","standard")
 				for bi, BO := range BidQueue {
 					for si, SO := range AskQueue {
 						if *BO.Quantity == *SO.Quantity {
@@ -62,7 +64,7 @@ func (c *Controller)PairOrder() {
 					}
 				}
 			case 1 :
-				c.SortOrders(*s.Symbol,"limit","bid")
+				BidQueue,AskQueue = c.SortOrders(*s.Symbol,"limit","bid")
 				for bi, BO := range BidQueue {
 					for si, SO := range AskQueue {
 						if *BO.Quantity == *SO.Quantity {
@@ -90,7 +92,7 @@ func (c *Controller)PairOrder() {
 					}
 				}
 			case 2 :
-				c.SortOrders(*s.Symbol,"price","standard")
+				BidQueue,AskQueue = c.SortOrders(*s.Symbol,"price","standard")
 				for bi, BO := range BidQueue {
 					for si, SO := range AskQueue {
 						if *BO.Quantity > *SO.Quantity {
@@ -141,7 +143,7 @@ func (c *Controller)PairOrder() {
 					}
 				}
 			case 3 :
-				c.SortOrders(*s.Symbol,"price","bid")
+				BidQueue,AskQueue = c.SortOrders(*s.Symbol,"price","bid")
 				for bi, BO := range BidQueue {
 					for si, SO := range AskQueue {
 						if *BO.Quantity > *SO.Quantity {
