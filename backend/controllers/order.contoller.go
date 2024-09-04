@@ -69,7 +69,7 @@ func (c *Controller) CreateOrder(ctx *gin.Context) {
 		log.Panic(err)
 		return
 	}
-	if err := ctx.ShouldBindJSON(&payload); err != nil {
+	if err := ctx.ShouldBindBodyWithJSON(&payload); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
