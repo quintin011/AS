@@ -511,7 +511,11 @@ func (c *Controller) ProcessTrading() {
 				}
 			}
 			stocks.UpdateStock(&newStock)
-			trades = append(trades[:ti],trades[ti+1:]... )
+			if ti == len(trades) {
+				trades = trades[:ti]
+			} else {
+				trades = append(trades[:ti],trades[ti+1:]... )
+			}
 		}
 	}
 	stocks.WriteStockJson(mkdloc)
