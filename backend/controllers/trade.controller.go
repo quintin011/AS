@@ -531,6 +531,10 @@ func (c *Controller) ProcessTrading() {
 				trades = append(trades[:ti],trades[ti+1:]... )
 			}
 		}
+		BO = models.Order{}
+		usr = models.User{}
+		SO = models.Order{}
+		POS =models.Position{}
 	}
 	stocks.WriteStockJson(mkdloc)
 	err := os.Rename(tradejsloc,"trade/trades_DONE"+time.Now().Format("20060102_150405s999999")+".json")
@@ -538,10 +542,6 @@ func (c *Controller) ProcessTrading() {
 		log.Panic(err)
 		return
 	}
-	trades =nil
-	BO = models.Order{}
-	usr = models.User{}
-	SO = models.Order{}
 }
 
 func (c *Controller)TradeRun() {
@@ -550,5 +550,6 @@ func (c *Controller)TradeRun() {
 			time.Sleep(time.Second * 5)
 			c.ProcessTrading()
 			time.Sleep(time.Second * 5)
+			trades = nil
 	}
 }
