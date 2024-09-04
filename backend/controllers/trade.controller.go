@@ -454,7 +454,6 @@ func (c *Controller) ProcessTrading() {
 			tprice:=decimal.NewFromFloat32(*trade.Price).Mul(decimal.NewFromFloat32(float32(*trade.TVol))) 
 			price,_ := tprice.Float64()
 			newBalance := so_usr.Balance + float32(price)
-			fmt.Printf("price:%f,newBalance:%f\n",price,newBalance)	
 			updateSellerBalance := c.DB.Model(&so_usr).Where(models.User{UID: *SO.UID}).Updates(models.User{Balance: newBalance})
 			if updateSellerBalance.Error != nil {
 				log.Panic(updateSellerBalance.Error)
@@ -488,7 +487,6 @@ func (c *Controller) ProcessTrading() {
 			tprice = decimal.NewFromFloat32(*trade.Price).Mul(decimal.NewFromFloat32(float32(*trade.TVol))) 
 			price,_ = tprice.Float64()
 			newBalance = usr.Balance - float32(price)
-			fmt.Printf("price:%f,newBalance:%f\n",price,newBalance)	
 			updateBuyerBalance := c.DB.Model(&usr).Where(models.User{UID: *BO.UID}).Updates(models.User{Balance: newBalance})
 			if updateBuyerBalance.Error != nil {
 				log.Panic(updateBuyerBalance.Error)
@@ -527,11 +525,12 @@ func (c *Controller) ProcessTrading() {
 				}
 			}
 			stocks.UpdateStock(&newStock)
-			if ti+1 > len(trades) {
+			if ti+1 >= len(trades) {
 				trades = trades[:ti]
 			} else {
 				trades = append(trades[:ti],trades[ti+1:]... )
 			}
+			fmt.Println(trades)
 		}
 	}
 	stocks.WriteStockJson(mkdloc)
