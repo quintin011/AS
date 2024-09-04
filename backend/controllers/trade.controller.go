@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cw2/backend/models"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 var trades Trades
@@ -378,7 +379,9 @@ func (c *Controller) ProcessTrading() {
 				log.Panic(updateSOStatus.Error)
 			}
 		}
-		if usr.Balance < (*trade.Price * float32(*trade.TVol)) {
+		tprice:=decimal.NewFromFloat32(*trade.Price).Mul(decimal.NewFromFloat32(float32(*trade.TVol))) 
+		price,_ := tprice.Float64()
+		if usr.Balance < float32(price) {
 			updateBOStatus := c.DB.Model(&BO).Update("status","Rejected")
 			trades= append(trades[:ti],trades[ti+1:]... )
 			if updateBOStatus.Error != nil {
@@ -444,7 +447,10 @@ func (c *Controller) ProcessTrading() {
 				log.Panic(updateSellerPosition.Error)
 				return
 			}
-			updateSellerBalance := c.DB.Model(&usr).Where(models.User{UID: *SO.UID}).Update("balance",usr.Balance+(*trade.Price * float32(*trade.TVol)))
+			tprice:=decimal.NewFromFloat32(*trade.Price).Mul(decimal.NewFromFloat32(float32(*trade.TVol))) 
+			price,_ := tprice.Float64()
+			newBalance := usr.Balance + float32(price)	
+			updateSellerBalance := c.DB.Model(&usr).Where(models.User{UID: *SO.UID}).Update("balance",newBalance)
 			if updateSellerBalance.Error != nil {
 				log.Panic(updateSellerBalance.Error)
 				return
@@ -473,7 +479,10 @@ func (c *Controller) ProcessTrading() {
 					return
 				}
 			}
-			updateBuyerBalance := c.DB.Model(&usr).Where(models.User{UID: *BO.UID}).Update("balance",usr.Balance-(*trade.Price * float32(*trade.TVol)))
+			tprice = decimal.NewFromFloat32(*trade.Price).Mul(decimal.NewFromFloat32(float32(*trade.TVol))) 
+			price,_ = tprice.Float64()
+			newBalance = usr.Balance - float32(price)
+			updateBuyerBalance := c.DB.Model(&usr).Where(models.User{UID: *BO.UID}).Update("balance",newBalance)
 			if updateBuyerBalance.Error != nil {
 				log.Panic(updateBuyerBalance.Error)
 				return
