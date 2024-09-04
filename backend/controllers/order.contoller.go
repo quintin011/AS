@@ -84,19 +84,19 @@ func (c *Controller) CreateOrder(ctx *gin.Context) {
 	}
 	switch strings.ToLower(*payload.OrderType) {
 	case "limit":
-		method = true
+		otype = true
 	case "price":
-		method = false
+		otype = false
 	default:
-		method = true
+		otype = true
 	}
 	switch strings.ToLower(*payload.PlaceType) {
 	case "standard":
-		method = true
+		ptype = true
 	case "bid":
-		method = false
+		ptype = false
 	default:
-		method = true
+		ptype = true
 	}
 
 	newOrder := models.Order{
