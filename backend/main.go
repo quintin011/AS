@@ -58,8 +58,8 @@ func init() {
 	if err != nil {
 		log.Fatal("Error is occurred  on .env file please check")
 	}
-	host,_ := strconv.Atoi(os.Getenv("DB_HOST"))
-	port := os.Getenv("DB_PORT")
+	host := os.Getenv("DB_HOST")
+	port,_ := strconv.Atoi(os.Getenv("DB_PORT"))
 	user := os.Getenv("DB_USER")
 	dbname := os.Getenv("DB_NAME")
 	pwd := os.Getenv("DB_PASSWORD")
