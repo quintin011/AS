@@ -58,8 +58,16 @@ func (c *Controller)PairOrder() {
 						if *BO.Quantity == *SO.Quantity {
 							trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade, *BO.Quantity)
 							trades = append(trades, trade)
-							BidQueue = append(BidQueue[:bi],BidQueue[bi+1:]... )
-							AskQueue = append(AskQueue[:si],AskQueue[si+1:]... )
+							if bi+1 == len(BidQueue) {
+								BidQueue = BidQueue[:bi]	
+							} else {
+								BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+							}
+							if si+1 == len(AskQueue){
+								AskQueue = AskQueue[:si]
+							} else {
+								AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+							}	
 						}
 					}
 				}
@@ -72,21 +80,45 @@ func (c *Controller)PairOrder() {
 								if *SO.Price >= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*BO.Price,*BO.Quantity)
 									trades = append(trades, trade)
-									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-									AskQueue = append(AskQueue[:si], AskQueue[si+1:]... )
+									if bi+1 == len(BidQueue) {
+										BidQueue = BidQueue[:bi]	
+									} else {
+										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+									}
+									if si+1 == len(AskQueue){
+										AskQueue = AskQueue[:si]
+									} else {
+										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									}	
 								} 
 							} else if *AskQueue[len(AskQueue)-1].Price < s.Low {
 								if *BO.Price <= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*SO.Price,*BO.Quantity)
 									trades = append(trades, trade)
-									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									if bi+1 == len(BidQueue) {
+										BidQueue = BidQueue[:bi]	
+									} else {
+										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+									}
+									if si+1 == len(AskQueue){
+										AskQueue = AskQueue[:si]
+									} else {
+										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									}		
 								}
 							} else {
 								trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade,*BO.Quantity)
 								trades = append(trades, trade)
-								BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-								AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+								if bi+1 == len(BidQueue) {
+									BidQueue = BidQueue[:bi]	
+								} else {
+									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+								}
+								if si+1 == len(AskQueue){
+									AskQueue = AskQueue[:si]
+								} else {
+									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+								}	
 							}
 						}
 					}
@@ -114,7 +146,11 @@ func (c *Controller)PairOrder() {
 							}
 							
 							BidQueue[bi] = newBO
-							AskQueue = append(AskQueue[:si],AskQueue[si+1:]... )	
+							if si+1 == len(AskQueue){
+								AskQueue = AskQueue[:si]
+							} else {
+								AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+							}	
 						} else if *SO.Quantity > *BO.Quantity {
 							trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade, *BO.Quantity)
 							trades = append(trades, trade)
@@ -133,12 +169,24 @@ func (c *Controller)PairOrder() {
 								UpdatedAt: SO.UpdatedAt,
 							}
 							AskQueue[si] = newSO
-							BidQueue = append(BidQueue[:bi],AskQueue[si+1:]... )
+							if bi+1 == len(BidQueue) {
+								BidQueue = BidQueue[:bi]	
+							} else {
+								BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+							}
 						} else {
 							trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade, *BO.Quantity)
 							trades = append(trades, trade)
-							BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-							AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+							if bi+1 == len(BidQueue) {
+								BidQueue = BidQueue[:bi]	
+							} else {
+								BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+							}
+							if si+1 == len(AskQueue){
+								AskQueue = AskQueue[:si]
+							} else {
+								AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+							}	
 						}
 					}
 				}
@@ -151,63 +199,135 @@ func (c *Controller)PairOrder() {
 								if *SO.Price >= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*BO.Price,*SO.Quantity)
 									trades = append(trades, trade)
-									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									if bi+1 == len(BidQueue) {
+										BidQueue = BidQueue[:bi]	
+									} else {
+										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+									}
+									if si+1 == len(AskQueue){
+										AskQueue = AskQueue[:si]
+									} else {
+										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									}	
 								} 
 							} else if *AskQueue[len(AskQueue)-1].Price < s.Low {
 								if *BO.Price <= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*SO.Price,*SO.Quantity)
 									trades = append(trades, trade)
-									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)
+									if bi+1 == len(BidQueue) {
+										BidQueue = BidQueue[:bi]	
+									} else {
+										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+									}
+									if si+1 == len(AskQueue){
+										AskQueue = AskQueue[:si]
+									} else {
+										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									}
 								}
 							} else {
 								trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade,*SO.Quantity)
 								trades = append(trades, trade)
-								BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-								AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)
+								if bi+1 == len(BidQueue) {
+									BidQueue = BidQueue[:bi]	
+								} else {
+									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+								}
+								if si+1 == len(AskQueue){
+									AskQueue = AskQueue[:si]
+								} else {
+									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+								}
 							}
 						} else if *SO.Quantity > *BO.Quantity {
 							if *BidQueue[len(BidQueue)-1].Price > s.High {
 								if *SO.Price >= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*BO.Price,*BO.Quantity)
 									trades = append(trades, trade)
-									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)
+									if bi+1 == len(BidQueue) {
+										BidQueue = BidQueue[:bi]	
+									} else {
+										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+									}
+									if si+1 == len(AskQueue){
+										AskQueue = AskQueue[:si]
+									} else {
+										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									}
 								} 
 							} else if *AskQueue[len(AskQueue)-1].Price < s.Low {
 								if *BO.Price <= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*SO.Price,*BO.Quantity)
 									trades = append(trades, trade)
-									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)
+									if bi+1 == len(BidQueue) {
+										BidQueue = BidQueue[:bi]	
+									} else {
+										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+									}
+									if si+1 == len(AskQueue){
+										AskQueue = AskQueue[:si]
+									} else {
+										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									}
 								}
 							} else {
 								trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade,*BO.Quantity)
 								trades = append(trades, trade)
-								BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-								AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)
+								if bi+1 == len(BidQueue) {
+									BidQueue = BidQueue[:bi]	
+								} else {
+									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+								}
+								if si+1 == len(AskQueue){
+									AskQueue = AskQueue[:si]
+								} else {
+									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+								}
 							}	
 						} else {
 							if *BidQueue[len(BidQueue)-1].Price > s.High {
 								if *SO.Price >= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*BO.Price,*SO.Quantity)
 									trades = append(trades, trade)
-									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)
+									if bi+1 == len(BidQueue) {
+										BidQueue = BidQueue[:bi]	
+									} else {
+										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+									}
+									if si+1 == len(AskQueue){
+										AskQueue = AskQueue[:si]
+									} else {
+										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									}
 								} 
 							} else if *AskQueue[len(AskQueue)-1].Price < s.Low {
 								if *BO.Price <= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*SO.Price,*SO.Quantity)
 									trades = append(trades, trade)
-									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									if bi+1 == len(BidQueue) {
+										BidQueue = BidQueue[:bi]	
+									} else {
+										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+									}
+									if si+1 == len(AskQueue){
+										AskQueue = AskQueue[:si]
+									} else {
+										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+									}	
 								}
 							} else {
 								trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade,*SO.Quantity)
 								trades = append(trades, trade)
-								BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)
-								AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)
+								if bi+1 == len(BidQueue) {
+									BidQueue = BidQueue[:bi]	
+								} else {
+									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
+								}
+								if si+1 == len(AskQueue){
+									AskQueue = AskQueue[:si]
+								} else {
+									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
+								}
 							}	
 						}
 					}
