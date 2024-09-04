@@ -511,7 +511,7 @@ func (c *Controller) ProcessTrading() {
 				}
 			}
 			stocks.UpdateStock(&newStock)
-			if ti == len(trades) {
+			if ti+1 > len(trades) {
 				trades = trades[:ti]
 			} else {
 				trades = append(trades[:ti],trades[ti+1:]... )
