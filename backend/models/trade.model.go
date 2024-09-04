@@ -16,7 +16,7 @@ type Order struct {
 	PlaceType *bool      `gorm:"type:bool;not null"` // 1 = standard, 0 = bid
 	Symbol    *string    `gorm:"type:varchar(6);not null"`
 	Price     *float32   `gorm:"type:numeric(10,2);default:0.01;check: price > 0"`
-	Quantity  *int       `gorm:"type:numeric;default:1;check: volume > 0"`
+	Quantity  *int       `gorm:"type:numeric;default:1;check: quantity > 0"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
