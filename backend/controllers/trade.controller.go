@@ -538,6 +538,10 @@ func (c *Controller) ProcessTrading() {
 		log.Panic(err)
 		return
 	}
+	trades =nil
+	BO = models.Order{}
+	usr = models.User{}
+	SO = models.Order{}
 }
 
 func (c *Controller)TradeRun() {
