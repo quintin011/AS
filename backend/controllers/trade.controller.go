@@ -58,12 +58,12 @@ func (c *Controller)PairOrder() {
 						if *BO.Quantity == *SO.Quantity {
 							trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade, *BO.Quantity)
 							trades = append(trades, trade)
-							if bi+1 == len(BidQueue) {
+							if bi == len(BidQueue) {
 								BidQueue = BidQueue[:bi]	
 							} else {
 								BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 							}
-							if si+1 == len(AskQueue){
+							if si == len(AskQueue){
 								AskQueue = AskQueue[:si]
 							} else {
 								AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -80,12 +80,12 @@ func (c *Controller)PairOrder() {
 								if *SO.Price >= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*BO.Price,*BO.Quantity)
 									trades = append(trades, trade)
-									if bi+1 == len(BidQueue) {
+									if bi == len(BidQueue) {
 										BidQueue = BidQueue[:bi]	
 									} else {
 										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 									}
-									if si+1 == len(AskQueue){
+									if si == len(AskQueue){
 										AskQueue = AskQueue[:si]
 									} else {
 										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -95,12 +95,12 @@ func (c *Controller)PairOrder() {
 								if *BO.Price <= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*SO.Price,*BO.Quantity)
 									trades = append(trades, trade)
-									if bi+1 == len(BidQueue) {
+									if bi == len(BidQueue) {
 										BidQueue = BidQueue[:bi]	
 									} else {
 										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 									}
-									if si+1 == len(AskQueue){
+									if si == len(AskQueue){
 										AskQueue = AskQueue[:si]
 									} else {
 										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -109,12 +109,12 @@ func (c *Controller)PairOrder() {
 							} else {
 								trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade,*BO.Quantity)
 								trades = append(trades, trade)
-								if bi+1 == len(BidQueue) {
+								if bi == len(BidQueue) {
 									BidQueue = BidQueue[:bi]	
 								} else {
 									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 								}
-								if si+1 == len(AskQueue){
+								if si == len(AskQueue){
 									AskQueue = AskQueue[:si]
 								} else {
 									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -169,7 +169,7 @@ func (c *Controller)PairOrder() {
 								UpdatedAt: SO.UpdatedAt,
 							}
 							AskQueue[si] = newSO
-							if bi+1 == len(BidQueue) {
+							if bi == len(BidQueue) {
 								BidQueue = BidQueue[:bi]	
 							} else {
 								BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
@@ -177,12 +177,12 @@ func (c *Controller)PairOrder() {
 						} else {
 							trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade, *BO.Quantity)
 							trades = append(trades, trade)
-							if bi+1 == len(BidQueue) {
+							if bi == len(BidQueue) {
 								BidQueue = BidQueue[:bi]	
 							} else {
 								BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 							}
-							if si+1 == len(AskQueue){
+							if si == len(AskQueue){
 								AskQueue = AskQueue[:si]
 							} else {
 								AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -199,12 +199,12 @@ func (c *Controller)PairOrder() {
 								if *SO.Price >= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*BO.Price,*SO.Quantity)
 									trades = append(trades, trade)
-									if bi+1 == len(BidQueue) {
+									if bi == len(BidQueue) {
 										BidQueue = BidQueue[:bi]	
 									} else {
 										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 									}
-									if si+1 == len(AskQueue){
+									if si == len(AskQueue){
 										AskQueue = AskQueue[:si]
 									} else {
 										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -214,12 +214,12 @@ func (c *Controller)PairOrder() {
 								if *BO.Price <= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*SO.Price,*SO.Quantity)
 									trades = append(trades, trade)
-									if bi+1 == len(BidQueue) {
+									if bi == len(BidQueue) {
 										BidQueue = BidQueue[:bi]	
 									} else {
 										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 									}
-									if si+1 == len(AskQueue){
+									if si == len(AskQueue){
 										AskQueue = AskQueue[:si]
 									} else {
 										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -228,12 +228,12 @@ func (c *Controller)PairOrder() {
 							} else {
 								trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade,*SO.Quantity)
 								trades = append(trades, trade)
-								if bi+1 == len(BidQueue) {
+								if bi == len(BidQueue) {
 									BidQueue = BidQueue[:bi]	
 								} else {
 									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 								}
-								if si+1 == len(AskQueue){
+								if si == len(AskQueue){
 									AskQueue = AskQueue[:si]
 								} else {
 									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -244,12 +244,12 @@ func (c *Controller)PairOrder() {
 								if *SO.Price >= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*BO.Price,*BO.Quantity)
 									trades = append(trades, trade)
-									if bi+1 == len(BidQueue) {
+									if bi == len(BidQueue) {
 										BidQueue = BidQueue[:bi]	
 									} else {
 										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 									}
-									if si+1 == len(AskQueue){
+									if si == len(AskQueue){
 										AskQueue = AskQueue[:si]
 									} else {
 										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -259,12 +259,12 @@ func (c *Controller)PairOrder() {
 								if *BO.Price <= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*SO.Price,*BO.Quantity)
 									trades = append(trades, trade)
-									if bi+1 == len(BidQueue) {
+									if bi == len(BidQueue) {
 										BidQueue = BidQueue[:bi]	
 									} else {
 										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 									}
-									if si+1 == len(AskQueue){
+									if si == len(AskQueue){
 										AskQueue = AskQueue[:si]
 									} else {
 										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -273,12 +273,12 @@ func (c *Controller)PairOrder() {
 							} else {
 								trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade,*BO.Quantity)
 								trades = append(trades, trade)
-								if bi+1 == len(BidQueue) {
+								if bi == len(BidQueue) {
 									BidQueue = BidQueue[:bi]	
 								} else {
 									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 								}
-								if si+1 == len(AskQueue){
+								if si == len(AskQueue){
 									AskQueue = AskQueue[:si]
 								} else {
 									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -289,12 +289,12 @@ func (c *Controller)PairOrder() {
 								if *SO.Price >= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*BO.Price,*SO.Quantity)
 									trades = append(trades, trade)
-									if bi+1 == len(BidQueue) {
+									if bi == len(BidQueue) {
 										BidQueue = BidQueue[:bi]	
 									} else {
 										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 									}
-									if si+1 == len(AskQueue){
+									if si == len(AskQueue){
 										AskQueue = AskQueue[:si]
 									} else {
 										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -304,12 +304,12 @@ func (c *Controller)PairOrder() {
 								if *BO.Price <= s.LastTrade {
 									trade.Create(BO.OID.String(),SO.OID.String(),*SO.Price,*SO.Quantity)
 									trades = append(trades, trade)
-									if bi+1 == len(BidQueue) {
+									if bi == len(BidQueue) {
 										BidQueue = BidQueue[:bi]	
 									} else {
 										BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 									}
-									if si+1 == len(AskQueue){
+									if si == len(AskQueue){
 										AskQueue = AskQueue[:si]
 									} else {
 										AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -318,12 +318,12 @@ func (c *Controller)PairOrder() {
 							} else {
 								trade.Create(BO.OID.String(),SO.OID.String(),s.LastTrade,*SO.Quantity)
 								trades = append(trades, trade)
-								if bi+1 == len(BidQueue) {
+								if bi == len(BidQueue) {
 									BidQueue = BidQueue[:bi]	
 								} else {
 									BidQueue = append(BidQueue[:bi], BidQueue[bi+1:]...)	
 								}
-								if si+1 == len(AskQueue){
+								if si == len(AskQueue){
 									AskQueue = AskQueue[:si]
 								} else {
 									AskQueue = append(AskQueue[:si], AskQueue[si+1:]...)	
@@ -379,13 +379,13 @@ func (c *Controller) ProcessTrading() {
 			}
 		}
 		if usr.Balance < (*trade.Price * float32(*trade.TVol)) {
-			updateBOStatus := c.DB.First(&BO,"o_id = ?",BO.OID).Update("status","Rejected")
+			updateBOStatus := c.DB.First(&BO).Update("status","Rejected")
 			trades= append(trades[:ti],trades[ti+1:]... )
 			if updateBOStatus.Error != nil {
 				log.Panic(updateBOStatus.Error)
 			}
 		} else {
-			updateBOStatus := c.DB.First(&BO,"o_id = ?",BO.OID).Update("status","Progressing")	
+			updateBOStatus := c.DB.First(&BO).Update("status","Progressing")	
 			if updateBOStatus.Error != nil {
 				log.Panic(updateBOStatus.Error)
 			}
@@ -394,7 +394,7 @@ func (c *Controller) ProcessTrading() {
 		if getSO.Error != nil {
 			log.Panic(getSO.Error)
 			trades = append(trades[:ti],trades[ti+1:]... )
-			updateBOStatus := c.DB.First(&BO,"o_id = ?",BO.OID).Update("status","Pending")	
+			updateBOStatus := c.DB.First(&BO).Update("status","Pending")	
 			if updateBOStatus.Error != nil {
 				log.Panic(updateBOStatus.Error)
 			}	
