@@ -349,8 +349,8 @@ func (c *Controller) ProcessTrading() {
 	var usr models.User
 	var POS models.Position
 	trades := ReadTradeJson(tradejsloc)
+	fmt.Println(trades)
 	for ti, trade := range trades {
-		fmt.Println(ti)
 		getBO := c.DB.Find(&BO,"o_id = ?",trade.BuyOID)
 		if getBO.Error != nil {
 			log.Panic(getBO.Error)
