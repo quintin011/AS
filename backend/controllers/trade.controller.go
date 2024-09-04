@@ -43,6 +43,8 @@ func (c *Controller) SortOrders(symbol string,otype string, ptype string) ([]mod
 			log.Panic("error: wrong PlaceType")
 		}	
 	}
+	fmt.Printf("BQ:%s\n",tempBQ)
+	fmt.Printf("SQ:%s\n",tempSQ)
 	return tempBQ,tempSQ 
 }
 
