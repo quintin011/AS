@@ -52,7 +52,7 @@ func (c *Controller) GetUser(ctx *gin.Context) {
 func (c *Controller) UpdateBankInfo(ctx *gin.Context) {
 	var payload *models.BankIn
 	var usr models.User
-	if err := ctx.ShouldBindJSON(&payload); err != nil {
+	if err := ctx.ShouldBindBodyWithJSON(&payload); err != nil {
 		log.Panic(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
@@ -79,7 +79,7 @@ func (c *Controller) UpdateBankInfo(ctx *gin.Context) {
 func (c *Controller) ChangePassword(ctx *gin.Context) {
 	var payload *models.Changepwd
 	var usr models.User
-	if err := ctx.ShouldBindJSON(&payload); err != nil {
+	if err := ctx.ShouldBindBodyWithJSON(&payload); err != nil {
 		log.Panic(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
@@ -125,7 +125,7 @@ func (c *Controller) ChangePassword(ctx *gin.Context) {
 func (c *Controller) ChangeUserInfo(ctx *gin.Context) {
 	var payload *models.Changeinfo
 	var usr models.User
-	if err := ctx.ShouldBindJSON(&payload); err != nil {
+	if err := ctx.ShouldBindBodyWithJSON(&payload); err != nil {
 		log.Panic(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail"})
 		return
