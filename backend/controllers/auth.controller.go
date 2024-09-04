@@ -30,13 +30,8 @@ func (c *Controller) SignUp(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": fencmsg})
 		return
 	}
-	hash, err = bcrypt.GenerateFromPassword([]byte(payload.HKID), 10)
-	if err != nil {
-		log.Panic(err)
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Failed to hash password."})
-		return
-	}
-	id, err := encryption.Encrypt(hash)
+	
+	id, err := encryption.Encrypt([]byte(payload.HKID))
 	if err != nil {
 		log.Panic(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": fencmsg})
