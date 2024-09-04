@@ -37,11 +37,11 @@ func (user *User) BeforeCreate(*gorm.DB) error {
 }
 
 type RegUsrIn struct {
-	Name     *string `json:"name" binding:required`
-	Email    *string `json:"email" binding:required`
-	Password *string `json:"password" binding:required`
-	Mobile   *string `json:"mobile" binding:required`
-	HKID     *string `json:"hkid" binding:required`
+	Name     string `json:"name" binding:required`
+	Email    string `json:"email" binding:required`
+	Password string `json:"password" binding:required`
+	Mobile   string `json:"mobile" binding:required`
+	HKID     string `json:"hkid" binding:required`
 }
 
 type LoginIn struct {

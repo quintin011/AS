@@ -18,7 +18,7 @@ func (c *Controller) SignUp(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(*payload.Password), 10)
+	hash, err := bcrypt.GenerateFromPassword([]byte(payload.Password), 10)
 	if err != nil {
 		log.Panic(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Failed to hash password."})
@@ -30,7 +30,7 @@ func (c *Controller) SignUp(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": fencmsg})
 		return
 	}
-	hash, err = bcrypt.GenerateFromPassword([]byte(*payload.HKID), 10)
+	hash, err = bcrypt.GenerateFromPassword([]byte(payload.HKID), 10)
 	if err != nil {
 		log.Panic(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Failed to hash password."})
@@ -42,16 +42,16 @@ func (c *Controller) SignUp(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": fencmsg})
 		return
 	}
-	last4no, err := encryption.Encrypt([]byte(*payload.Mobile)[4:])
+	last4no, err := encryption.Encrypt([]byte(payload.Mobile)[4:])
 	if err != nil {
 		log.Panic(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": fencmsg})
 		return
 	}
-	NewEmail := strings.ToLower(*payload.Email)
-	NewMobile := string([]byte(*payload.Mobile)[:4]) + last4no
+	NewEmail := strings.ToLower(payload.Email)
+	NewMobile := string([]byte(payload.Mobile)[:4]) + last4no
 	newUser := models.User{
-		Name:     payload.Name,
+		Name:     &payload.Name,
 		Email:    &NewEmail,
 		Password: &pwd,
 		Mobile:   &NewMobile,
