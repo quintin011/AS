@@ -437,6 +437,8 @@ func (c *Controller) ProcessTrading() {
 			}
 			return
 		} else {
+			var so_usr models.User
+			c.DB.Find(&so_usr,"uid = ?",SO.UID)
 			newPOS := models.Position{
 				UID: *SO.UID,
 				SID: *SO.Symbol,
@@ -449,8 +451,8 @@ func (c *Controller) ProcessTrading() {
 			}
 			tprice:=decimal.NewFromFloat32(*trade.Price).Mul(decimal.NewFromFloat32(float32(*trade.TVol))) 
 			price,_ := tprice.Float64()
-			newBalance := usr.Balance + float32(price)
-			fmt.Printf("price:%d,newBalance:%d\n",price,newBalance)	
+			newBalance := so_usr.Balance + float32(price)
+			fmt.Printf("price:%f,newBalance:%f\n",price,newBalance)	
 			updateSellerBalance := c.DB.Model(&usr).Where(models.User{UID: *SO.UID}).Updates(models.User{Balance: newBalance})
 			if updateSellerBalance.Error != nil {
 				log.Panic(updateSellerBalance.Error)
