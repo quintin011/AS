@@ -453,7 +453,7 @@ func (c *Controller) ProcessTrading() {
 			price,_ := tprice.Float64()
 			newBalance := so_usr.Balance + float32(price)
 			fmt.Printf("price:%f,newBalance:%f\n",price,newBalance)	
-			updateSellerBalance := c.DB.Model(&usr).Where(models.User{UID: *SO.UID}).Updates(models.User{Balance: newBalance})
+			updateSellerBalance := c.DB.Model(&so_usr).Where(models.User{UID: *SO.UID}).Updates(models.User{Balance: newBalance})
 			if updateSellerBalance.Error != nil {
 				log.Panic(updateSellerBalance.Error)
 				return
