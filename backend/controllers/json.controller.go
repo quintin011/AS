@@ -49,7 +49,7 @@ func (T *Trades)WriteTradeJson(fname string) error{
 			return err
 		}
 	} else {
-		file,_ := os.Open(fname)
+		file,_ := os.OpenFile(fname, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 		defer file.Close()
 		_, err := file.Write(JSON)
 		if err != nil {

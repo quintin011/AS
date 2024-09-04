@@ -26,7 +26,7 @@ var (
 	server     *gin.Engine
 	C          controllers.Controller
 	R          routes.Routes
-	tradejsloc = "trades/trades.json"
+	tradejsloc = "trade/trades.json"
 	logger     *logrus.Logger
 	sport	   string
 )
@@ -81,12 +81,12 @@ func init() {
 	if _, err = os.Stat("trade"); os.IsNotExist(err) {
 		os.Mkdir("trade", 0755)
 		os.OpenFile(tradejsloc, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
-	} else if os.Stat(tradejsloc); os.IsNotExist(err) {
+	} else if _,err = os.Stat(tradejsloc); os.IsNotExist(err) {
 		os.OpenFile(tradejsloc, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	}
 	if _, err = os.Stat("stocks"); os.IsNotExist(err) {
 		os.Mkdir("stocks", 0755)
-	} else if os.Stat("stocks/marketdata.json"); os.IsNotExist(err) {
+	} else if _,err = os.Stat("stocks/marketdata.json"); os.IsNotExist(err) {
 		log.Fatal("Please pull the marketdata.")
 	}
 
@@ -114,7 +114,7 @@ func main() {
 	R.MainR(r)
 	go backup.Backup()
 	time.Sleep(time.Second * 5)
-	//go C.TradeRun()
-	//time.Sleep(time.Second * 5)
+	go C.TradeRun()
+	time.Sleep(time.Second * 5)
 	go log.Fatal(server.Run(":"+sport))
 }

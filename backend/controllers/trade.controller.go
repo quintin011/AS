@@ -402,9 +402,9 @@ func (c *Controller) ProcessTrading() {
 
 func (c *Controller)TradeRun() {
 	for {
-		c.PairOrder()
-		time.Sleep(time.Second * 5)
-		c.ProcessTrading()
-		time.Sleep(time.Second * 5)
+			c.PairOrder()
+			time.Sleep(time.Second * 5)
+			c.ProcessTrading()
+			time.Sleep(time.Second * 5)
 	}
 }
