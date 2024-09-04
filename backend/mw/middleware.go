@@ -30,9 +30,11 @@ func RequestLoggingMiddleware(logger *logrus.Logger) gin.HandlerFunc {
 		}
 		ctx.Writer = ginBodyLogger
 		var req interface{}
-		if err := ctx.ShouldBindBodyWithJSON(&req); err != nil {
-			ctx.JSON(http.StatusBadRequest, err.Error())
-			return
+		if ctx.Request.URL.Path != "/api/hc" {
+			if err := ctx.ShouldBindBodyWithJSON(&req); err != nil {
+				ctx.JSON(http.StatusBadRequest, err.Error())
+				return
+			}
 		}
 		data, err := json.Marshal(req)
 		if err != nil {
