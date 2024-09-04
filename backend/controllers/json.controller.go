@@ -17,6 +17,7 @@ func ReadStockJson(fname string) Stocks {
 	JSON, err:= os.Open(fname)
 	if err != nil {
 		log.Panic(err)
+		return Stocks{}
 	}
 	defer JSON.Close()
 	Item, _ := os.ReadFile(fname)
@@ -29,6 +30,7 @@ func ReadTradeJson(fname string) Trades {
 	JSON, err:= os.Open(fname)
 	if err != nil {
 		log.Panic(err)
+		return Trades{}
 	}
 	defer JSON.Close()
 	Item, _ := os.ReadFile(fname)

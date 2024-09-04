@@ -78,8 +78,8 @@ func init() {
 		log.Fatal("Failed to connect to the Database")
 	}
 	log.Println("🚀 Connected Successfully to the Database")
-	if _, err = os.Stat("trades"); os.IsNotExist(err) {
-		os.Mkdir("trades", 0755)
+	if _, err = os.Stat("trade"); os.IsNotExist(err) {
+		os.Mkdir("trade", 0755)
 		os.OpenFile(tradejsloc, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	} else if os.Stat(tradejsloc); os.IsNotExist(err) {
 		os.OpenFile(tradejsloc, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
@@ -114,7 +114,7 @@ func main() {
 	R.MainR(r)
 	go backup.Backup()
 	time.Sleep(time.Second * 5)
-	go C.TradeRun()
-	time.Sleep(time.Second * 5)
+	//go C.TradeRun()
+	//time.Sleep(time.Second * 5)
 	go log.Fatal(server.Run(":"+sport))
 }

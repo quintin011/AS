@@ -12,9 +12,9 @@ import (
 )
 
 func (c *Controller) SignUp(ctx *gin.Context) {
-	var payload *models.RegUsrIn
+	var payload models.RegUsrIn
 	fencmsg := "Failed to Encrypt."
-	if err := ctx.ShouldBindJSON(&payload); err != nil {
+	if err := ctx.ShouldBindBodyWithJSON(&payload); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
@@ -71,8 +71,8 @@ func (c *Controller) SignUp(ctx *gin.Context) {
 }
 
 func (c *Controller) LoginUser(ctx *gin.Context) {
-	var payload *models.LoginIn
-	if err := ctx.ShouldBindJSON(&payload); err != nil {
+	var payload models.LoginIn
+	if err := ctx.ShouldBindBodyWithJSON(&payload); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
