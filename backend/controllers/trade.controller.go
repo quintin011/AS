@@ -463,20 +463,26 @@ func (c *Controller) ProcessTrading() {
 				log.Panic(updateSOStatus.Error)
 				return
 			}
-			newPOS = models.Position{
-				UID: *BO.UID,
-				SID: *BO.Symbol,
-				Volume: POS.Volume + *trade.TVol,
-			}
-			chkBuyerPosition := c.DB.First(&BOPOS,models.Position{UID: *BO.UID,SID: *BO.Symbol})
-			if errors.Is(chkBuyerPosition.Error, gorm.ErrRecordNotFound) {
-				rslt := c.DB.Model(POS).Create(&newPOS)
+			
+			
+			if err := c.DB.First(&BOPOS,models.Position{UID: *BO.UID,SID: *BO.Symbol}).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+				newPOS = models.Position{
+					UID: *BO.UID,
+					SID: *BO.Symbol,
+					Volume: BOPOS.Volume + *trade.TVol,
+				}
+				rslt := c.DB.Model(&BOPOS).Create(&newPOS)
 				if rslt.Error != nil {
 					log.Panic(rslt.Error)
 					return
 				}
 			} else {
-				rslt := c.DB.Model(&POS).Where(models.Position{UID: *BO.UID,SID: *BO.Symbol}).Updates(newPOS)
+				newPOS = models.Position{
+					UID: *BO.UID,
+					SID: *BO.Symbol,
+					Volume: BOPOS.Volume + *trade.TVol,
+				}
+				rslt := c.DB.Model(&BOPOS).Where(models.Position{UID: *BO.UID,SID: *BO.Symbol}).Updates(newPOS)
 				if rslt.Error != nil {
 					log.Panic(rslt.Error)
 					return
