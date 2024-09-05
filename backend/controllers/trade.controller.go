@@ -467,6 +467,7 @@ func (c *Controller) ProcessTrading() {
 				Volume: POS.Volume + *trade.TVol,
 			}
 			chkBuyerPosition := c.DB.Find(&BOPOS,models.Position{UID: *BO.UID,SID: *BO.Symbol})
+			fmt.Println(BOPOS)
 			log.Panic(chkBuyerPosition.Error)
 			// if errors.Is(chkBuyerPosition.Error, gorm.ErrRecordNotFound) {
 			// 	rslt := c.DB.Model(POS).Create(&newPOS)
