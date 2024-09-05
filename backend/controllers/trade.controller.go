@@ -346,6 +346,7 @@ func (c *Controller) ProcessTrading() {
 	var SO models.Order
 	var usr models.User
 	var POS models.Position
+	var BOPOS models.Position
 	trades := ReadTradeJson(tradejsloc)
 	for ti, trade := range trades {
 		getBO := c.DB.Find(&BO,"o_id = ?",trade.BuyOID)
@@ -465,7 +466,7 @@ func (c *Controller) ProcessTrading() {
 				SID: *BO.Symbol,
 				Volume: POS.Volume + *trade.TVol,
 			}
-			chkBuyerPosition := c.DB.Where(models.Position{UID: *BO.UID,SID: *BO.Symbol}).Find(&POS)
+			chkBuyerPosition := c.DB.Find(&BOPOS,models.Position{UID: *BO.UID,SID: *BO.Symbol})
 			log.Panic(chkBuyerPosition.Error)
 			// if errors.Is(chkBuyerPosition.Error, gorm.ErrRecordNotFound) {
 			// 	rslt := c.DB.Model(POS).Create(&newPOS)
