@@ -72,11 +72,14 @@ type UserinfoOut struct {
 	HKID       string    `json:"hk_id,omitempty" binding:required`
 	Balance    float32    `json:"balance,omitempty" binding:required`
 	BankAccount Bank	`json:"bank,omitempty" binding:required`	
-	Position   []Position `json:"pos,omitempty" binding:required`
-	Order      []Order    `json:"order,omitempty" binding:required`	
 }
 type Bank struct {
 	BankCode   string     `json:"code,omitempty" binding:required`
 	BranchCode string     `json:"branch,omitempty" binding:required`
 	AccountNo  string     `json:"ac,omitempty" binding:required`
+}
+
+type POSout struct {
+	Symbol string `json:"name,omitempty" binding:required`
+	Quantity int `json:"name,omitempty" binding:required`
 }

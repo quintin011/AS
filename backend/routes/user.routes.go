@@ -8,4 +8,5 @@ func (r *Routes) User(rg *gin.RouterGroup) {
 	router.POST("/update/password", r.Ctrl.ChangePassword)
 	router.POST("/update/userinfo", r.Ctrl.ChangeUserInfo)
 	router.GET("/",r.Ctrl.GetUser)
+	router.GET("/pos",r.Ctrl.ListPos)
 }

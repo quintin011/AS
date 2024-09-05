@@ -42,9 +42,7 @@ func (c *Controller) GetUser(ctx *gin.Context) {
 		Mobile: mobile,
 		HKID: hkid,
 		Balance: usr.Balance,
-		BankAccount: bank,
-		Position: usr.Position,
-		Order: usr.Order,
+		BankAccount: bank,	
 	}
 	ctx.JSON(http.StatusOK, &ousr)
 }
@@ -161,4 +159,28 @@ func (c *Controller) ChangeUserInfo(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusAccepted, gin.H{"status": "success"})
+}
+func (c *Controller) ListPos(ctx *gin.Context) {
+	uid := ctx.GetHeader("X-Uid")
+	var POS []models.Position
+	var usr models.User
+	var lspos []models.POSout
+	rslt := c.DB.First(&usr, "uid = ?", uid)
+	if rslt.Error != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": rslt.Error.Error()})
+		return
+	}
+	rslt = c.DB.Find(&POS, "uid = ?", uid)
+	if rslt.Error != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": rslt.Error.Error()})
+		return
+	}
+	for _, pos := range POS {
+		newpos := models.POSout{
+			Symbol: pos.SID,
+			Quantity: pos.Volume,
+		}
+		lspos = append(lspos, newpos)
+	}
+	ctx.JSON(http.StatusOK, lspos)
 }
