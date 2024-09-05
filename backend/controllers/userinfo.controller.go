@@ -8,6 +8,7 @@ import (
 	"github.com/cw2/backend/encryption"
 	"github.com/cw2/backend/models"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 func (c *Controller) GetUser(ctx *gin.Context) {
@@ -183,4 +184,24 @@ func (c *Controller) ListPos(ctx *gin.Context) {
 		lspos = append(lspos, &newpos)
 	}
 	ctx.JSON(http.StatusOK, lspos)
+}
+
+func (c *Controller)AddBalance(ctx *gin.Context) {
+	var usr models.User
+	var payload models.AddBal
+	uid,_ := uuid.FromString(ctx.GetHeader("X-Uid"))
+	if err := ctx.ShouldBindBodyWithJSON(&payload) ; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+	if err := c.DB.Find(&usr,"uid = ?",uid).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	newBalance := usr.Balance + payload.Balance
+	if err := c.DB.Model(&usr).Where(models.User{UID: uid}).Updates(models.User{Balance: newBalance}).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusAccepted, gin.H{"status": "success"})
 }
