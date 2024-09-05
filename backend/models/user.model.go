@@ -80,6 +80,6 @@ type Bank struct {
 }
 
 type POSout struct {
-	Symbol string `json:"name,omitempty" binding:required`
-	Quantity int `json:"name,omitempty" binding:required`
+	Symbol string `json:"symbol,omitempty" binding:required`
+	Quantity int `json:"quantity,omitempty" binding:required`
 }

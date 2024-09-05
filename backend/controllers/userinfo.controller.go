@@ -185,5 +185,5 @@ func (c *Controller) ListPos(ctx *gin.Context) {
 		fmt.Println(newpos)
 		lspos = append(lspos, &newpos)
 	}
-	ctx.JSON(http.StatusOK, gin.H{"Positions": &lspos})
+	ctx.JSON(http.StatusOK, lspos)
 }
