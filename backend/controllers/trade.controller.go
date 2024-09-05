@@ -466,7 +466,7 @@ func (c *Controller) ProcessTrading() {
 				SID: *BO.Symbol,
 				Volume: POS.Volume + *trade.TVol,
 			}
-			chkBuyerPosition := c.DB.Find(&BOPOS,models.Position{UID: *BO.UID,SID: *BO.Symbol})
+			chkBuyerPosition := c.DB.First(&BOPOS,models.Position{UID: *BO.UID,SID: *BO.Symbol})
 			fmt.Println(BOPOS)
 			log.Panic(chkBuyerPosition.Error)
 			// if errors.Is(chkBuyerPosition.Error, gorm.ErrRecordNotFound) {
