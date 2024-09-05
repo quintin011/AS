@@ -89,3 +89,7 @@ type POSout struct {
 	Symbol string `json:"symbol,omitempty" binding:required`
 	Quantity int `json:"quantity,omitempty" binding:required`
 }
+
+type AddBal struct {
+	Balance float32 `json:"balance,omitempty" binding:required`
+}
