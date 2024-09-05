@@ -140,7 +140,7 @@ Services will make new stocks directory when stocks is not exist on working dire
    "balance": 10000
 }
 ```
-1. /api/v1/user/test/add/positions?symbol=0001&quan=1000
+9. /api/v1/user/test/add/positions?symbol=0001&quan=1000
     - just for test trading!!!!
     - symbol: stocks symbol, type: string
     - quan: Quantity, type: int
