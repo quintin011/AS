@@ -165,7 +165,7 @@ func (c *Controller) ListPos(ctx *gin.Context) {
 	uid := ctx.GetHeader("X-Uid")
 	var POS []models.Position
 	var usr models.User
-	var lspos []models.POSout
+	var lspos []*models.POSout
 	rslt := c.DB.First(&usr, "uid = ?", uid)
 	if rslt.Error != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": rslt.Error.Error()})
@@ -183,8 +183,8 @@ func (c *Controller) ListPos(ctx *gin.Context) {
 		}
 		fmt.Println(pos)
 		fmt.Println(newpos)
-		lspos = append(lspos, newpos)
-		fmt.Println(lspos)
+		lspos = append(lspos, &newpos)
 	}
-	ctx.JSON(http.StatusOK, &lspos)
+	fmt.Println(lspos)
+	ctx.JSON(http.StatusOK, lspos)
 }
