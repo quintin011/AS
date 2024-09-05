@@ -412,7 +412,7 @@ func (c *Controller) ProcessTrading() {
 				log.Panic(updateBOStatus.Error)
 			}	
 		}
-		chkSellerPosition := c.DB.Find(&POS,models.Position{UID: *SO.UID,SID: *SO.Symbol})
+		chkSellerPosition := c.DB.First(&POS,models.Position{UID: *SO.UID,SID: *SO.Symbol})
 		if chkSellerPosition.Error != nil {
 			log.Panic(chkSellerPosition.Error)
 			trades = append(trades[:ti],trades[ti+1:]... )

@@ -25,12 +25,18 @@ type User struct {
 }
 
 type Position struct {
-	gorm.Model
+	ID        uuid.UUID `gorm:"type:uuid;primarykey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
 	UID    uuid.UUID `gorm:"type:uuid;"`
 	SID    string    `gorm:"type:varchar(6);not null"`
 	Volume int       `gorm:"type:numeric;default:1;check: volume > 0 "`
 }
 
+func (pos *Position) BeforeCreate(*gorm.DB) error {
+	pos.ID = uuid.NewV4()
+	return nil
+}
 func (user *User) BeforeCreate(*gorm.DB) error {
 	user.UID = uuid.NewV4()
 	return nil
