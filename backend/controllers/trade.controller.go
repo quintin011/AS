@@ -465,7 +465,7 @@ func (c *Controller) ProcessTrading() {
 				SID: *BO.Symbol,
 				Volume: POS.Volume + *trade.TVol,
 			}
-			chkBuyerPosition := c.DB.Find(&POS,models.Position{UID: *BO.UID,SID: *BO.Symbol})
+			chkBuyerPosition := c.DB.Where(models.Position{UID: *BO.UID,SID: *BO.Symbol}).Find(&POS)
 			if chkBuyerPosition.Error != nil {
 				fmt.Println(chkBuyerPosition.Error)
 			}
