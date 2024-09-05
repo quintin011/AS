@@ -469,7 +469,7 @@ func (c *Controller) ProcessTrading() {
 			}
 			chkBuyerPosition := c.DB.Find(&POS,models.Position{UID: *BO.UID,SID: *BO.Symbol})
 			if errors.Is(chkBuyerPosition.Error, gorm.ErrRecordNotFound) {
-				rslt := c.DB.Create(&newPOS)
+				rslt := c.DB.Model(POS).Create(&newPOS)
 				if rslt.Error != nil {
 					log.Panic(rslt.Error)
 					return

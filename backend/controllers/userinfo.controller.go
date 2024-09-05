@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -180,7 +181,10 @@ func (c *Controller) ListPos(ctx *gin.Context) {
 			Symbol: pos.SID,
 			Quantity: pos.Volume,
 		}
+		fmt.Println(pos)
+		fmt.Println(newpos)
 		lspos = append(lspos, newpos)
+		fmt.Println(lspos)
 	}
 	ctx.JSON(http.StatusOK, lspos)
 }
