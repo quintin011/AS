@@ -15,7 +15,7 @@ import (
 func (c *Controller)AddPos(ctx *gin.Context){
 	var usr models.User
 	var POS models.Position
-	user, _ := uuid.FromString(ctx.Query("user"))
+	user, _ := uuid.FromString(ctx.GetHeader("X-Uid"))
 	sym := ctx.Query("symbol")
 	quan,_:= strconv.Atoi(ctx.Query("quan"))
 	if err := c.DB.First(&usr, "uid = ?", user).Error; err != nil {
