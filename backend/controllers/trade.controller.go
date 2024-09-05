@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -10,7 +9,6 @@ import (
 
 	"github.com/cw2/backend/models"
 	"github.com/shopspring/decimal"
-	"gorm.io/gorm"
 )
 var trades Trades
 var BidQueue []models.Order
@@ -468,19 +466,22 @@ func (c *Controller) ProcessTrading() {
 				Volume: POS.Volume + *trade.TVol,
 			}
 			chkBuyerPosition := c.DB.Find(&POS,models.Position{UID: *BO.UID,SID: *BO.Symbol})
-			if errors.Is(chkBuyerPosition.Error, gorm.ErrRecordNotFound) {
-				rslt := c.DB.Model(POS).Create(&newPOS)
-				if rslt.Error != nil {
-					log.Panic(rslt.Error)
-					return
-				}
-			} else {
-				rslt := c.DB.Model(&POS).Where(models.Position{UID: *BO.UID,SID: *BO.Symbol}).Updates(newPOS)
-				if rslt.Error != nil {
-					log.Panic(rslt.Error)
-					return
-				}
+			if chkBuyerPosition.Error != nil {
+				fmt.Println(chkBuyerPosition.Error)
 			}
+			// if errors.Is(chkBuyerPosition.Error, gorm.ErrRecordNotFound) {
+			// 	rslt := c.DB.Model(POS).Create(&newPOS)
+			// 	if rslt.Error != nil {
+			// 		log.Panic(rslt.Error)
+			// 		return
+			// 	}
+			// } else {
+			// 	rslt := c.DB.Model(&POS).Where(models.Position{UID: *BO.UID,SID: *BO.Symbol}).Updates(newPOS)
+			// 	if rslt.Error != nil {
+			// 		log.Panic(rslt.Error)
+			// 		return
+			// 	}
+			// }
 			c.DB.Find(&usr,"uid = ?",BO.UID)
 			tprice = decimal.NewFromFloat32(*trade.Price).Mul(decimal.NewFromFloat32(float32(*trade.TVol))) 
 			price,_ = tprice.Float64()
