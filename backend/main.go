@@ -101,7 +101,7 @@ func init() {
 func main() {
 
 	corsconf := cors.DefaultConfig()
-	corsconf.AllowOrigins = []string{"http://"}
+	corsconf.AllowOrigins = []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://13.236.191.187:5173", "http://ec2-13-236-191-187.ap-southeast-2.compute.amazonaws.com:5173"}
 	corsconf.AllowCredentials = true
 	server.Use(cors.New(corsconf))
 
