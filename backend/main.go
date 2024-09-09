@@ -13,6 +13,7 @@ import (
 	"github.com/cw2/backend/models"
 	"github.com/cw2/backend/mw"
 	"github.com/cw2/backend/routes"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/natefinch/lumberjack"
@@ -99,10 +100,10 @@ func init() {
 
 func main() {
 
-	// corsconf := cors.DefaultConfig()
-	// corsconf.AllowOrigins = []string{"http://"}
-	// corsconf.AllowCredentials = true
-	// server.Use(cors.New(corsconf))
+	corsconf := cors.DefaultConfig()
+	corsconf.AllowOrigins = []string{"http://"}
+	corsconf.AllowCredentials = true
+	server.Use(cors.New(corsconf))
 
 	r := server.Group("/api")
 
