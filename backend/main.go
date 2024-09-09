@@ -95,15 +95,15 @@ func init() {
 	R = routes.NewRoutes(C)
 
 	server = gin.Default()
+	//corsconf := cors.DefaultConfig()
+	// corsconf.AllowOrigins = []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://13.236.191.187:8080", "http://ec2-13-236-191-187.ap-southeast-2.compute.amazonaws.com:8080"}
+	// corsconf.AllowCredentials = true
+	//server.Use(cors.New(corsconf))
+	server.Use(cors.Default())
 	server.Use(mw.RequestLoggingMiddleware(logger))
 }
 
 func main() {
-
-	corsconf := cors.DefaultConfig()
-	corsconf.AllowOrigins = []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://13.236.191.187:5173", "http://ec2-13-236-191-187.ap-southeast-2.compute.amazonaws.com:5173"}
-	corsconf.AllowCredentials = true
-	server.Use(cors.New(corsconf))
 
 	r := server.Group("/api")
 
