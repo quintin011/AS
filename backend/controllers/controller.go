@@ -8,8 +8,4 @@ type Controller struct {
 
 func NewController(DB *gorm.DB) Controller {
 	return Controller{DB}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> v0.0.2

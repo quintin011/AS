@@ -26,12 +26,20 @@ func (c *Controller) ListOrder(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, orders)
 }
-func (c *Controller) TradeListOrder() []models.Order {
+func (c *Controller) TradeListOrder(symbol string, method bool,otype bool, ptype bool) []models.Order {
 	var orders []models.Order
-	rslt := c.DB.Find(&orders)
-	if rslt.Error != nil {
-		log.Panic(rslt.Error)
-		return nil
+	if method {
+		rslt := c.DB.Where(models.Order{Symbol: &symbol, Method: &method, OrderType: &otype, PlaceType: &ptype, Status: "Pending"}).Order("price desc").Find(&orders)
+		if rslt.Error != nil {
+			log.Panic(rslt.Error)
+			return nil
+		}
+	} else {
+		rslt := c.DB.Where(models.Order{Symbol: &symbol, Method: &method, OrderType: &otype, PlaceType: &ptype, Status: "Pending"}).Order("price asc").Find(&orders)
+		if rslt.Error != nil {
+			log.Panic(rslt.Error)
+			return nil
+		}
 	}
 	return orders
 }
@@ -61,7 +69,7 @@ func (c *Controller) CreateOrder(ctx *gin.Context) {
 		log.Panic(err)
 		return
 	}
-	if err := ctx.ShouldBindJSON(&payload); err != nil {
+	if err := ctx.ShouldBindBodyWithJSON(&payload); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
@@ -76,19 +84,19 @@ func (c *Controller) CreateOrder(ctx *gin.Context) {
 	}
 	switch strings.ToLower(*payload.OrderType) {
 	case "limit":
-		method = true
+		otype = true
 	case "price":
-		method = false
+		otype = false
 	default:
-		method = true
+		otype = true
 	}
 	switch strings.ToLower(*payload.PlaceType) {
 	case "standard":
-		method = true
+		ptype = true
 	case "bid":
-		method = false
+		ptype = false
 	default:
-		method = true
+		ptype = true
 	}
 
 	newOrder := models.Order{

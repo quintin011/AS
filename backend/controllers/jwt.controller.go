@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/cw2/backend/encryption"
 	"github.com/cw2/backend/models"
@@ -23,6 +24,16 @@ func (c *Controller)HandlerCheck() gin.HandlerFunc {
 			return
 		}
 		t := encryption.ParseToken(jwtToken)
+		ttime,err := t.Claims.GetExpirationTime()
+		if err != nil {
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			//log.Panic(err)
+			return
+		}
+		if ttime.Equal(time.Now()) || ttime.Before(time.Now()) {
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return	
+		}
 		tuid, err := t.Claims.GetSubject()
 		if err != nil {
 			ctx.AbortWithStatus(http.StatusUnauthorized)

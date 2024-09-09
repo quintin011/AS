@@ -17,6 +17,7 @@ func ReadStockJson(fname string) Stocks {
 	JSON, err:= os.Open(fname)
 	if err != nil {
 		log.Panic(err)
+		return Stocks{}
 	}
 	defer JSON.Close()
 	Item, _ := os.ReadFile(fname)
@@ -29,6 +30,7 @@ func ReadTradeJson(fname string) Trades {
 	JSON, err:= os.Open(fname)
 	if err != nil {
 		log.Panic(err)
+		return Trades{}
 	}
 	defer JSON.Close()
 	Item, _ := os.ReadFile(fname)
@@ -47,7 +49,9 @@ func (T *Trades)WriteTradeJson(fname string) error{
 			return err
 		}
 	} else {
-		err := cp.Copy(fname,fname+"_"+time.Now().Format("20060102_150405s999999"))
+		file,_ := os.OpenFile(fname, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+		defer file.Close()
+		_, err := file.Write(JSON)
 		if err != nil {
 			return err
 		}
