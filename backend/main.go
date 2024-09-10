@@ -98,7 +98,7 @@ func init() {
 	corsconf := cors.DefaultConfig()
 	corsconf.ExposeHeaders = []string{"Content-Length", "Content-Type", "Authorization", "X-Uid"}
 	corsconf.AllowAllOrigins = true
-	corsconf.AllowHeaders = []string{"Authorization", "X-Uid"}
+	corsconf.AllowHeaders = []string{"Authorization", "X-Uid","Content-Type","Content-Length"}
 	// corsconf.AllowOrigins = []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://13.236.191.187:8080", "http://ec2-13-236-191-187.ap-southeast-2.compute.amazonaws.com:8080"}
 	// corsconf.AllowCredentials = true
 	//server.Use(cors.New(corsconf))
