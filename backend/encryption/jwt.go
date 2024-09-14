@@ -22,7 +22,7 @@ func GenToken(User *models.User) *jwt.Token{
 func Signstring(t *jwt.Token) string {
 	s, err := t.SignedString(prikey)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	return s 
 }

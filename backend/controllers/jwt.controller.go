@@ -16,18 +16,20 @@ func (c *Controller)HandlerCheck() gin.HandlerFunc {
 		jwt := ctx.GetHeader("Authorization")
 		if jwt == "" || uid == "" {
 			ctx.AbortWithStatus(http.StatusUnauthorized)
+			log.Panic("Authorization or X-Uid missing")
 			return
 		}
 		jwtToken := encryption.SplitJWT(jwt)
 		if jwtToken == "" {
 			ctx.AbortWithStatus(http.StatusUnauthorized)
+			log.Panic("Wrong Header")
 			return
 		}
 		t := encryption.ParseToken(jwtToken)
 		ttime,err := t.Claims.GetExpirationTime()
 		if err != nil {
 			ctx.AbortWithStatus(http.StatusUnauthorized)
-			//log.Panic(err)
+			log.Panic(err)
 			return
 		}
 		if ttime.Equal(time.Now()) || ttime.Before(time.Now()) {
@@ -37,7 +39,7 @@ func (c *Controller)HandlerCheck() gin.HandlerFunc {
 		tuid, err := t.Claims.GetSubject()
 		if err != nil {
 			ctx.AbortWithStatus(http.StatusUnauthorized)
-			//log.Panic(err)
+			log.Panic(err)
 			return
 		}
 		if uid != tuid {
@@ -48,11 +50,11 @@ func (c *Controller)HandlerCheck() gin.HandlerFunc {
 		var usr models.User
 		rslt := c.DB.First(&usr, "uid = ?", tuid)
 		if rslt.Error != nil {
-			//log.Panic(rslt.Error)
+			log.Panic(rslt.Error)
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		} else if tiss, err := t.Claims.GetIssuer(); err != nil {
-			//log.Panic(err)
+			log.Panic(err)
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		} else if tiss != "Prod" {

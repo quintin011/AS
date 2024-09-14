@@ -18,7 +18,7 @@ func EncryptPubkey(t []byte, pub *rsa.PublicKey) []byte {
 	hash := sha512.New()
 	cip_t, err := rsa.EncryptOAEP(hash,rand.Reader, pub,t,nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	return cip_t
 }

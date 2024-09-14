@@ -68,16 +68,14 @@ func init() {
 
 	DB, err = gorm.Open(postgres.Open(fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
 		host, port, user, dbname, pwd)), &gorm.Config{})
-
-	DB.AutoMigrate(
-		models.User{},
-		&models.Position{},
-		&models.Order{},
-	)
-
 	if err != nil {
 		log.Fatal("Failed to connect to the Database")
 	}
+	DB.AutoMigrate(
+                models.User{},
+                &models.Position{},
+                &models.Order{},
+        )
 	log.Println("🚀 Connected Successfully to the Database")
 	if _, err = os.Stat("trade"); os.IsNotExist(err) {
 		os.Mkdir("trade", 0755)
@@ -97,8 +95,10 @@ func init() {
 	server = gin.Default()
 	corsconf := cors.DefaultConfig()
 	corsconf.ExposeHeaders = []string{"Content-Length", "Content-Type", "Authorization", "X-Uid"}
-	corsconf.AllowAllOrigins = true
-	corsconf.AllowHeaders = []string{"Authorization", "X-Uid","Content-Type","Content-Length"}
+	corsconf.AllowOrigins = []string{"https://pakatrade.site"}
+	corsconf.AllowCredentials = true
+	corsconf.AddAllowHeaders("Authorization", "X-Uid")
+	//corsconf.AllowHeaders = []string{"Authorization", "X-Uid","Content-Type","Content-Length"}
 	// corsconf.AllowOrigins = []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://13.236.191.187:8080", "http://ec2-13-236-191-187.ap-southeast-2.compute.amazonaws.com:8080"}
 	// corsconf.AllowCredentials = true
 	//server.Use(cors.New(corsconf))
@@ -120,5 +120,5 @@ func main() {
 	time.Sleep(time.Second * 5)
 	go C.TradeRun()
 	time.Sleep(time.Second * 5)
-	go log.Fatal(server.Run(":" + sport))
+	go log.Fatal(server.RunTLS(":" + sport,"chain.crt","crt.key"))
 }

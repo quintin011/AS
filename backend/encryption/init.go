@@ -1,6 +1,6 @@
 package encryption
 
-import (
+import (	
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -25,34 +25,35 @@ func init() {
 		prib,pubb := PrikeyBytes(prikey), PubkeyBytes(pubkey)
 		err := os.WriteFile("private.pem", prib, 0644)
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 		err = os.WriteFile("public.pem", pubb, 0644)
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	} else if os.IsNotExist(puberr) && os.IsExist(prierr) {
-		log.Fatal("please import private/public key under root directory")
+		log.Panic("please import private/public key under root directory")
 	} else if os.IsExist(puberr) && os.IsNotExist(prierr) {
-		log.Fatal("please import private/public key under root directory")
+		log.Panic("please import private/public key under root directory")
 	} else {
 		prib, err := os.ReadFile("private.pem")
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 		prikey = BytePrikey(prib)
 		pubb, err := os.ReadFile("public.pem")
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 		pubkey = BytePubkey(pubb)
+		
 	} 
 }
 
 func GenKey(bits int) (*rsa.PrivateKey, *rsa.PublicKey) {
 	prikey,err := rsa.GenerateKey(rand.Reader, bits)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	return prikey, &prikey.PublicKey
 }
@@ -69,7 +70,7 @@ func PrikeyBytes(pri *rsa.PrivateKey) []byte {
 func PubkeyBytes(pub *rsa.PublicKey) []byte {
 	pubASN, err := x509.MarshalPKIXPublicKey(pub)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	B := pem.EncodeToMemory(&pem.Block{
 		Type:  "RSA PUBLIC KEY",
@@ -82,7 +83,7 @@ func BytePrikey(pri []byte) *rsa.PrivateKey {
 	bl, _ := pem.Decode(pri)
 	key, err := x509.ParsePKCS1PrivateKey(bl.Bytes)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	return key
 }
@@ -91,7 +92,7 @@ func BytePubkey(pub []byte) *rsa.PublicKey {
 	bl, _ := pem.Decode(pub)
 	keys,err:= x509.ParsePKIXPublicKey(bl.Bytes)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	key := keys.(*rsa.PublicKey)
 	return key
