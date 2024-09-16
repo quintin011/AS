@@ -27,9 +27,9 @@ for first start, please sign-up serverless and make initialize serverless
 ```
 serverless
 ```
-you can login by browser or using license key for can't login serverless and want to create same organization
-please check serverless.yaml to define stage 
-when you had multiple aws accesskey on local please define below on Makefile
+- you can login by browser or using license key for can't login serverless and want to create same organization
+- please check serverless.yaml to define stage 
+- when you had multiple aws accesskey on local please define below on Makefile
 ```
 build:
 	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bootstrap main.go 
@@ -117,7 +117,7 @@ Services will make new stocks directory when stocks is not exist on working dire
     "hkid": "Y1234567"
 }
 ```
-1. /api/v1/login 
+2. /api/v1/login 
      - Login Method to get JWT
      - Body:
 ```
@@ -126,7 +126,7 @@ Services will make new stocks directory when stocks is not exist on working dire
     "password": "123456"
 }
 ``` 
-1. /api/v1/order/create 
+3. /api/v1/order/create 
      - Create Order by User
      - Body: 
 ```
@@ -139,10 +139,10 @@ Services will make new stocks directory when stocks is not exist on working dire
         quantity:123
 }
 ```
-1. /api/v1/order/{Order ID}/cancel 
+4. /api/v1/order/{Order ID}/cancel 
      - Cancel Order by User. But this is not Remove record on DataBase. 
      - it is change order status to "Cancelled"
-2. /api/v1/user/update/bankinfo 
+5. /api/v1/user/update/bankinfo 
      - Setup bank account
      - Body:
 ```
@@ -152,7 +152,7 @@ Services will make new stocks directory when stocks is not exist on working dire
     "account": "123123123"
 }
 ```
-3. /api/v1/user/update/password
+6. /api/v1/user/update/password
      - Change Password
      - Body:
 ```
@@ -161,7 +161,7 @@ Services will make new stocks directory when stocks is not exist on working dire
     "newpwd": "123"
 }
 ```
-4. /api/v1/user/update/userinfo
+7. /api/v1/user/update/userinfo
      - Edit User informations
      - Body:
 ```
@@ -171,7 +171,7 @@ Services will make new stocks directory when stocks is not exist on working dire
     "mobile": "98765432"
 }
 ```
-5. /api/v1/user/addbalance
+8. /api/v1/user/addbalance
    - Add Balance
    - Body:
 ```
@@ -179,7 +179,7 @@ Services will make new stocks directory when stocks is not exist on working dire
    "balance": 10000
 }
 ```
-6. /api/v1/user/test/add/positions?symbol=0001&quan=1000
+9. /api/v1/user/test/add/positions?symbol=0001&quan=1000
     - just for test trading!!!!
     - symbol: stocks symbol, type: string
     - quan: Quantity, type: int
