@@ -11,7 +11,7 @@ provider:
   name: aws
   runtime: provided.al2023
   region: ap-southeast-2
-  stage: dev
+  stage: api
   
 functions:
   api:
@@ -22,59 +22,213 @@ functions:
       - http:
           path: /api/hc
           method: GET
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+
       - http:
           path: /api/v1/jwt/refresh
           method: GET
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
       - http:
           path: /api/v1/order
           method: GET
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
       - http:
           path: /api/v1/user
           method: GET
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
       - http:
           path: /api/v1/user/pos
           method: GET
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
       - http:
           path: /api/v1/register
           method: POST
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
       - http:
           path: /api/v1/login
           method: POST
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
       - http:
           path: /api/v1/order/create
           method: POST
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
       - http:
           path: /api/v1/user/update/password
           method: POST
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
       - http:
           path: /api/v1/user/update/userinfo
           method: POST
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
       - http:
           path: /api/v1/user/addbalance
           method: POST
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
       - http:
           path: /api/v1/order/{oid}/cancel
           method: POST
-          cors: true
-          request: 
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
+          request:
             parameters: 
               paths: 
                 oid: true 
       - http:
           path: /api/v1/order/{oid}
           method: GET
-          cors: true
+          cors: 
+            origin: '*' 
+            headers: 
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Uid
+              - Access-Control-Allow-Origin
+            allowCredentials: true
           request: 
             parameters: 
               paths: 

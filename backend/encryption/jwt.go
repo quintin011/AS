@@ -9,13 +9,14 @@ import (
 
 	"github.com/cw2/backend/models"
 	jwt "github.com/golang-jwt/jwt/v5"
+	"github.com/matelang/jwt-go-aws-kms/v2/jwtkms"
 )
 
 func GenToken(User *models.User) *jwt.Token {
-	t := jwt.NewWithClaims(jwt.SigningMethodRS512, jwt.MapClaims{
-		"iss": "Prod",
-		"sub": User.UID,
-		"exp": jwt.NewNumericDate(time.Now().Add(time.Minute * 30)),
+	t := jwt.NewWithClaims(jwtkms.SigningMethodRS256, &jwt.RegisteredClaims{
+		Issuer: "Prod",
+		Subject: User.UID.String(),
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 30)),
 	})
 	return t
 }

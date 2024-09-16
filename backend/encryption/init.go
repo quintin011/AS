@@ -22,6 +22,7 @@ var (
 	svc    *kms.Client
 	keyId  string
 	kmscfg *jwtkms.Config
+	jwtkeyId string
 )
 
 func init() {
@@ -31,8 +32,9 @@ func init() {
 	}
 
 	svc = kms.NewFromConfig(cfg)
+	jwtkeyId = "arn:aws:kms:ap-southeast-2:170164929417:key/0b575109-21cd-4566-bf70-1bcb3affc4d7"
 	keyId = "arn:aws:kms:ap-southeast-2:170164929417:key/ec055ebf-a2e4-46e5-872f-df8d08014675"
-	kmscfg = jwtkms.NewKMSConfig(svc, keyId, false)
+	kmscfg = jwtkms.NewKMSConfig(svc, jwtkeyId, false)
 	// _, prierr := os.Stat("private.pem")
 	// _, puberr := os.Stat("public.pem")
 	// if os.IsNotExist(puberr) && os.IsNotExist(prierr) {

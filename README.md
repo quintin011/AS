@@ -1,4 +1,47 @@
 # AS
+pre-requirements
+```
+awscli
+node 20
+make
+golang >=1.22
+```
+pre-start
+```
+aws configure
+<input aws accesskey>
+<input aws secrets>
+<region>
+<press enter>
+```
+if you want to multiple user for divide environment
+```
+aws configure --profile
+```
+install serverless & read .env plugin
+```
+npm i -g serverless
+npm i -D serverless-dotenv-plugin
+```
+for first start, please sign-up serverless and make initialize serverless
+```
+serverless
+```
+you can login by browser or using license key for can't login serverless and want to create same organization
+please check serverless.yaml to define stage 
+when you had multiple aws accesskey on local please define below on Makefile
+```
+build:
+	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bootstrap main.go 
+deploy: build
+	sls deploy --aws-profile <profile>
+clean:
+	rm -rf ./bin ./vendor Gopkg.lock ./serverless
+``` 
+for start service
+```
+make depoly
+```
 For connection of PostgreSQL Database,
 Please define environment file under working directory.
 > .env
@@ -59,11 +102,7 @@ Services will make new stocks directory when stocks is not exist on working dire
      - Get Specific Order 
   5. /api/v1/user 
      - Get User infomations
-  6. /api/v1/stock 
-     - List Stock on Market
-  7. /api/v1/stock/{Symbol} 
-     - Get Specific Stock
-  8. /api/v1/user/pos
+  6. /api/v1/user/pos
      - Get Position of user
 - POST
 1. /api/v1/register 
@@ -78,7 +117,7 @@ Services will make new stocks directory when stocks is not exist on working dire
     "hkid": "Y1234567"
 }
 ```
-2. /api/v1/login 
+1. /api/v1/login 
      - Login Method to get JWT
      - Body:
 ```
@@ -87,7 +126,7 @@ Services will make new stocks directory when stocks is not exist on working dire
     "password": "123456"
 }
 ``` 
-3. /api/v1/order/create 
+1. /api/v1/order/create 
      - Create Order by User
      - Body: 
 ```
@@ -100,10 +139,10 @@ Services will make new stocks directory when stocks is not exist on working dire
         quantity:123
 }
 ```
-4. /api/v1/order/{Order ID}/cancel 
+1. /api/v1/order/{Order ID}/cancel 
      - Cancel Order by User. But this is not Remove record on DataBase. 
      - it is change order status to "Cancelled"
-5. /api/v1/user/update/bankinfo 
+2. /api/v1/user/update/bankinfo 
      - Setup bank account
      - Body:
 ```
@@ -113,7 +152,7 @@ Services will make new stocks directory when stocks is not exist on working dire
     "account": "123123123"
 }
 ```
-6. /api/v1/user/update/password
+3. /api/v1/user/update/password
      - Change Password
      - Body:
 ```
@@ -122,7 +161,7 @@ Services will make new stocks directory when stocks is not exist on working dire
     "newpwd": "123"
 }
 ```
-7. /api/v1/user/update/userinfo
+4. /api/v1/user/update/userinfo
      - Edit User informations
      - Body:
 ```
@@ -132,7 +171,7 @@ Services will make new stocks directory when stocks is not exist on working dire
     "mobile": "98765432"
 }
 ```
-8. /api/v1/user/addbalance
+5. /api/v1/user/addbalance
    - Add Balance
    - Body:
 ```
@@ -140,7 +179,7 @@ Services will make new stocks directory when stocks is not exist on working dire
    "balance": 10000
 }
 ```
-9. /api/v1/user/test/add/positions?symbol=0001&quan=1000
+6. /api/v1/user/test/add/positions?symbol=0001&quan=1000
     - just for test trading!!!!
     - symbol: stocks symbol, type: string
     - quan: Quantity, type: int
